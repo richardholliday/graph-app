@@ -228,18 +228,18 @@ async function main() {
     });
     const subCanvas = document.createElement('canvas');
     subCanvas.width = 1024;
-    subCanvas.height = 80;
+    subCanvas.height = 100;
     const sctx = subCanvas.getContext('2d');
-    sctx.font = '36px -apple-system, BlinkMacSystemFont, sans-serif';
+    sctx.font = 'bold 42px Arial, sans-serif';
     sctx.textAlign = 'center';
     sctx.fillStyle = '#94a3b8';
-    sctx.fillText(`Last updated: ${ts}`, 512, 52);
+    sctx.fillText(`Last updated: ${ts}`, 512, 64);
     const subTex = new THREE.CanvasTexture(subCanvas);
     const subMesh = new THREE.Mesh(
-      new THREE.PlaneGeometry(350, 28),
+      new THREE.PlaneGeometry(350, 35),
       new THREE.MeshBasicMaterial({ map: subTex, transparent: true, depthWrite: false, side: THREE.DoubleSide })
     );
-    subMesh.position.set(0, 185, 0);
+    subMesh.position.set(0, 168, 0);
     G.scene().add(subMesh);
   }
 
