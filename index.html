@@ -4,42 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>News Knowledge Graph</title>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0f1117; color: #e0e0e0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; overflow: hidden; height: 100vh; }
+    #graph { width: 100vw; height: 100vh; }
 
-    body {
-      background: #0f1117;
-      color: #e0e0e0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      overflow: hidden;
-      height: 100vh;
-    }
-
-    #canvas { width: 100vw; height: 100vh; }
-
-    /* Links */
-    .link {
-      stroke-opacity: 0.45;
-      stroke-width: 1.5px;
-    }
-    .link:hover { stroke-opacity: 1; stroke-width: 2.5px; cursor: pointer; }
-
-    /* Nodes */
-    .node circle {
-      stroke-width: 2px;
-      cursor: pointer;
-      transition: r 0.15s;
-    }
-    .node circle:hover { stroke-width: 3px; }
-    .node text {
-      font-size: 11px;
-      fill: #ccc;
-      pointer-events: none;
-      text-shadow: 0 1px 3px #000, 0 0 6px #000;
-    }
-
-    /* Tooltip */
     #tooltip {
       position: fixed;
       background: rgba(20, 22, 30, 0.95);
@@ -56,16 +25,9 @@
     }
     #tooltip.visible { opacity: 1; }
     #tooltip .tt-label { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
-    #tooltip .tt-type {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      opacity: 0.6;
-      margin-bottom: 6px;
-    }
+    #tooltip .tt-type { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.6; margin-bottom: 6px; }
     #tooltip .tt-desc { opacity: 0.85; }
 
-    /* Legend */
     #legend {
       position: fixed;
       top: 20px;
@@ -80,7 +42,6 @@
     .legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
     .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
 
-    /* Controls */
     #controls {
       position: fixed;
       top: 20px;
@@ -94,7 +55,6 @@
     }
     #controls p { margin-bottom: 3px; }
 
-    /* Stats bar */
     #stats {
       position: fixed;
       bottom: 20px;
@@ -111,7 +71,7 @@
 </head>
 <body>
 
-<svg id="canvas"></svg>
+<div id="graph"></div>
 
 <div id="tooltip">
   <div class="tt-label"></div>
@@ -129,14 +89,18 @@
 </div>
 
 <div id="controls">
-  <p>Scroll — zoom</p>
-  <p>Drag — pan / move node</p>
+  <p>Left drag — rotate</p>
+  <p>Right drag / scroll — zoom</p>
+  <p>Middle drag — pan</p>
   <p>Hover — details</p>
 </div>
 
-<div id="stats" id="stats"></div>
+<div id="stats"></div>
 
-<script>
+<script type="module">
+import ForceGraph3D from 'https://esm.sh/3d-force-graph@1';
+import SpriteText from 'https://esm.sh/three-spritetext';
+
 const COLOR = {
   person:       "#f97316",
   organisation: "#3b82f6",
@@ -162,9 +126,9 @@ const LINK_COLOR = {
   default:         "#475569",
 };
 
-function nodeRadius(d, links) {
-  const degree = links.filter(l => l.source.id === d.id || l.target.id === d.id).length;
-  return Math.max(6, Math.min(20, 6 + degree * 1.4));
+function nodeVal(node, links) {
+  const degree = links.filter(l => l.source === node.id || l.target === node.id).length;
+  return Math.max(4, degree * 2);
 }
 
 async function main() {
@@ -174,98 +138,63 @@ async function main() {
     graph = await res.json();
   } catch (e) {
     document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;color:#f87171;font-size:18px;font-family:sans-serif;">
-      Could not load graph.json — run <code style="background:#1e2030;padding:2px 6px;border-radius:4px;">pipeline.py</code> first, then serve with <code style="background:#1e2030;padding:2px 6px;border-radius:4px;">python -m http.server 8000</code>
+      Could not load graph.json — run <code style="background:#1e2030;padding:2px 6px;border-radius:4px;">pipeline.py</code> first.
     </div>`;
     return;
   }
 
-  const svg = d3.select("#canvas");
-  const W = window.innerWidth;
-  const H = window.innerHeight;
-
-  const g = svg.append("g");
-
-  // Zoom
-  svg.call(d3.zoom().scaleExtent([0.2, 5]).on("zoom", e => g.attr("transform", e.transform)));
-
-  // Simulation
-  const simulation = d3.forceSimulation(graph.nodes)
-    .force("link", d3.forceLink(graph.links).id(d => d.id).distance(120).strength(0.4))
-    .force("charge", d3.forceManyBody().strength(-300))
-    .force("center", d3.forceCenter(W / 2, H / 2))
-    .force("collision", d3.forceCollide().radius(d => nodeRadius(d, graph.links) + 8));
-
-  // Draw links
-  const link = g.append("g").selectAll("line")
-    .data(graph.links)
-    .join("line")
-    .attr("class", "link")
-    .attr("stroke", d => LINK_COLOR[d.type] || LINK_COLOR.default);
-
-  // Draw nodes
-  const node = g.append("g").selectAll("g")
-    .data(graph.nodes)
-    .join("g")
-    .attr("class", "node")
-    .call(d3.drag()
-      .on("start", (e, d) => { if (!e.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
-      .on("drag",  (e, d) => { d.fx = e.x; d.fy = e.y; })
-      .on("end",   (e, d) => { if (!e.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; })
-    );
-
-  node.append("circle")
-    .attr("r", d => nodeRadius(d, graph.links))
-    .attr("fill", d => COLOR[d.type] || COLOR.concept)
-    .attr("stroke", d => d3.color(COLOR[d.type] || COLOR.concept).brighter(0.8));
-
-  node.append("text")
-    .attr("dy", d => nodeRadius(d, graph.links) + 13)
-    .attr("text-anchor", "middle")
-    .text(d => d.label);
-
-  // Tooltip
   const tooltip = document.getElementById("tooltip");
 
-  function showTooltip(e, d, isLink) {
-    const tt = tooltip;
-    if (isLink) {
-      tt.querySelector(".tt-label").textContent = `${d.source.label} → ${d.target.label}`;
-      tt.querySelector(".tt-type").textContent = d.type.replace(/_/g, " ");
-      tt.querySelector(".tt-desc").textContent = d.description;
-    } else {
-      tt.querySelector(".tt-label").textContent = d.label;
-      tt.querySelector(".tt-type").textContent = d.type;
-      tt.querySelector(".tt-desc").textContent = d.description;
-    }
-    tt.classList.add("visible");
+  function showTooltip(e, label, type, desc) {
+    tooltip.querySelector(".tt-label").textContent = label;
+    tooltip.querySelector(".tt-type").textContent = type.replace(/_/g, " ");
+    tooltip.querySelector(".tt-desc").textContent = desc;
+    tooltip.classList.add("visible");
+    moveTooltip(e);
   }
 
   function moveTooltip(e) {
-    const x = e.clientX + 16;
-    const y = e.clientY - 10;
-    tooltip.style.left = Math.min(x, window.innerWidth - 300) + "px";
-    tooltip.style.top = y + "px";
+    tooltip.style.left = Math.min(e.clientX + 16, window.innerWidth - 300) + "px";
+    tooltip.style.top = (e.clientY - 10) + "px";
   }
 
   function hideTooltip() { tooltip.classList.remove("visible"); }
 
-  node.on("mouseover", (e, d) => showTooltip(e, d, false))
-      .on("mousemove", moveTooltip)
-      .on("mouseout",  hideTooltip);
+  const G = ForceGraph3D()(document.getElementById("graph"))
+    .backgroundColor("#0f1117")
+    .graphData(graph)
+    .nodeVal(node => nodeVal(node, graph.links))
+    .nodeColor(node => COLOR[node.type] || COLOR.concept)
+    .nodeOpacity(0.9)
+    .nodeThreeObjectExtend(true)
+    .nodeThreeObject(node => {
+      const sprite = new SpriteText(node.label);
+      sprite.color = "#cccccc";
+      sprite.textHeight = 4;
+      sprite.material.depthWrite = false;
+      sprite.position.y = nodeVal(node, graph.links) * 0.75 + 10;
+      return sprite;
+    })
+    .linkColor(link => LINK_COLOR[link.type] || LINK_COLOR.default)
+    .linkOpacity(0.5)
+    .linkWidth(1)
+    .linkDirectionalParticles(1)
+    .linkDirectionalParticleWidth(1.5)
+    .linkDirectionalParticleColor(link => LINK_COLOR[link.type] || LINK_COLOR.default)
+    .onNodeHover((node, e) => {
+      document.body.style.cursor = node ? "pointer" : "default";
+      if (node) showTooltip(e || { clientX: 0, clientY: 0 }, node.label, node.type, node.description);
+      else hideTooltip();
+    })
+    .onLinkHover((link, e) => {
+      document.body.style.cursor = link ? "pointer" : "default";
+      if (link) showTooltip(e || { clientX: 0, clientY: 0 }, `${link.source.label} → ${link.target.label}`, link.type, link.description);
+      else hideTooltip();
+    });
 
-  link.on("mouseover", (e, d) => showTooltip(e, d, true))
-      .on("mousemove", moveTooltip)
-      .on("mouseout",  hideTooltip);
-
-  // Tick
-  simulation.on("tick", () => {
-    link
-      .attr("x1", d => d.source.x)
-      .attr("y1", d => d.source.y)
-      .attr("x2", d => d.target.x)
-      .attr("y2", d => d.target.y);
-
-    node.attr("transform", d => `translate(${d.x},${d.y})`);
+  // Move tooltip with mouse
+  window.addEventListener("mousemove", e => {
+    if (tooltip.classList.contains("visible")) moveTooltip(e);
   });
 
   // Stats
@@ -274,9 +203,27 @@ async function main() {
 
   // Resize
   window.addEventListener("resize", () => {
-    simulation.force("center", d3.forceCenter(window.innerWidth / 2, window.innerHeight / 2));
-    simulation.alpha(0.1).restart();
+    G.width(window.innerWidth);
+    G.height(window.innerHeight);
   });
+
+  // Intro spin — starts immediately, runs for 6 s or until user interacts
+  const dist = 600;
+  const y = 100;
+  let angle = 0;
+  let spinning = true;
+
+  const spinInterval = setInterval(() => {
+    if (!spinning) { clearInterval(spinInterval); return; }
+    angle += 0.01;
+    G.cameraPosition({ x: dist * Math.sin(angle), y, z: dist * Math.cos(angle) });
+  }, 16);
+
+  setTimeout(() => { spinning = false; }, 6000);
+
+  document.getElementById("graph").addEventListener("mousedown", () => {
+    spinning = false;
+  }, { once: true });
 }
 
 main();
