@@ -690,6 +690,8 @@ async function main() {
     .linkDirectionalParticles(1)
     .linkDirectionalParticleWidth(1.5)
     .linkDirectionalParticleColor(link => getLinkColor(link))
+    .linkDirectionalParticleOffset(link => link.__particleOffset ?? (link.__particleOffset = Math.random()))
+    .linkDirectionalParticleSpeed(link => link.__particleSpeed ?? (link.__particleSpeed = 0.003 + Math.random() * 0.004))
     .nodeVisibility(node => !state.hiddenTypes.has(node.type))
     .linkVisibility(link => {
       const s = link.source.type ?? nodeById.get(link.source.id ?? link.source)?.type;
