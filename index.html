@@ -167,6 +167,7 @@ async function main() {
     .nodeVal(node => nodeVal(node, graph.links))
     .nodeColor(node => COLOR[node.type] || COLOR.concept)
     .nodeOpacity(0.9)
+    .nodeResolution(24)
     .nodeThreeObjectExtend(true)
     .nodeThreeObject(node => {
       const sprite = new SpriteText(node.label);
