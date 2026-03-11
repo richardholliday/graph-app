@@ -270,26 +270,6 @@ async function main() {
   // Intro spin — starts after simulation settles so nodes are spread out
   G.onEngineStop(() => {
     G.zoomToFit(600, 80);
-
-    setTimeout(() => {
-      const pos = G.cameraPosition();
-      const dist = Math.sqrt(pos.x ** 2 + pos.y ** 2 + pos.z ** 2);
-      const y = pos.y;
-      let angle = Math.atan2(pos.x, pos.z);
-      let spinning = true;
-
-      const spinInterval = setInterval(() => {
-        if (!spinning) { clearInterval(spinInterval); return; }
-        angle += 0.008;
-        G.cameraPosition({ x: dist * Math.sin(angle), y, z: dist * Math.cos(angle) });
-      }, 16);
-
-      setTimeout(() => { spinning = false; }, 6000);
-
-      document.getElementById("graph").addEventListener("mousedown", () => {
-        spinning = false;
-      }, { once: true });
-    }, 700);
   });
 }
 
