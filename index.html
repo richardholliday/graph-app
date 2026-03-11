@@ -728,6 +728,16 @@ async function main() {
   G.onEngineStop(() => {});
   G.cameraPosition({ x: 0, y: 0, z: 450 });
 
+  // Fix near clipping plane so nodes don't vanish when zoomed in
+  const camera = G.camera();
+  camera.near = 0.5;
+  camera.updateProjectionMatrix();
+
+  // Reverse rotation direction on touch — feels more natural (content follows finger)
+  if ('ontouchstart' in window) {
+    G.controls().rotateSpeed = -1;
+  }
+
   // Enhance scene lighting for 3D sphere shading
   const scene = G.scene();
   scene.children
