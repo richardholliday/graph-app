@@ -737,16 +737,20 @@ function renderLegend() {
   }
 
   linksEl.innerHTML = '<h3>Links</h3>';
-  if (state.linkColourMode === 'type') {
-    [['causes','Hostile'],['supports','Cooperative'],['involves','Neutral'],['located_in','Structural']].forEach(([type, label]) => {
-      linksEl.innerHTML += `<div class="legend-item">
-        <div class="legend-line" style="background:${LINK_COLOR[type]}"></div>${label}
-      </div>`;
-    });
-  } else {
+  if (state.linkColourMode === 'sentiment') {
     Object.entries(SENTIMENT_COLOR).forEach(([s, c]) => {
       linksEl.innerHTML += `<div class="legend-item">
         <div class="legend-line" style="background:${c}"></div>${s.charAt(0).toUpperCase() + s.slice(1)}
+      </div>`;
+    });
+  } else {
+    // Show only link types actually present in the current graph
+    const presentTypes = [...new Set(state.rawData.links.map(l => l.type))].sort();
+    presentTypes.forEach(type => {
+      const color = LINK_COLOR[type] || LINK_COLOR.default;
+      const label = type.replace(/_/g, ' ');
+      linksEl.innerHTML += `<div class="legend-item">
+        <div class="legend-line" style="background:${color}"></div>${label}
       </div>`;
     });
   }
