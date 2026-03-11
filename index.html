@@ -203,6 +203,10 @@ async function main() {
       else hideTooltip();
     });
 
+  // Push nodes apart so labels don't overlap
+  G.d3Force('charge').strength(-400);
+  G.d3Force('link').distance(80);
+
   // Move tooltip with mouse
   window.addEventListener("mousemove", e => {
     if (tooltip.classList.contains("visible")) moveTooltip(e);
