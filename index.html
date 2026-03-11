@@ -269,7 +269,17 @@ async function main() {
 
   // Intro spin — starts after simulation settles so nodes are spread out
   G.onEngineStop(() => {
-    G.zoomToFit(600, 80);
+    // Find the top 30% of nodes by degree and zoom to their cluster
+    const degree = {};
+    graph.links.forEach(l => {
+      const s = l.source.id ?? l.source;
+      const t = l.target.id ?? l.target;
+      degree[s] = (degree[s] || 0) + 1;
+      degree[t] = (degree[t] || 0) + 1;
+    });
+    const sorted = Object.values(degree).sort((a, b) => b - a);
+    const threshold = sorted[Math.floor(sorted.length * 0.3)] || 1;
+    G.zoomToFit(600, 60, node => (degree[node.id] || 0) >= threshold);
   });
 }
 
