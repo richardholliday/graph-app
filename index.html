@@ -207,23 +207,26 @@ async function main() {
     G.height(window.innerHeight);
   });
 
-  // Intro spin — starts immediately, runs for 6 s or until user interacts
-  const dist = 600;
-  const y = 100;
-  let angle = 0;
-  let spinning = true;
+  // Intro spin — starts after simulation settles so nodes are spread out
+  G.onEngineStop(() => {
+    const pos = G.cameraPosition();
+    const dist = Math.sqrt(pos.x ** 2 + pos.y ** 2 + pos.z ** 2);
+    const y = pos.y;
+    let angle = Math.atan2(pos.x, pos.z);
+    let spinning = true;
 
-  const spinInterval = setInterval(() => {
-    if (!spinning) { clearInterval(spinInterval); return; }
-    angle += 0.01;
-    G.cameraPosition({ x: dist * Math.sin(angle), y, z: dist * Math.cos(angle) });
-  }, 16);
+    const spinInterval = setInterval(() => {
+      if (!spinning) { clearInterval(spinInterval); return; }
+      angle += 0.008;
+      G.cameraPosition({ x: dist * Math.sin(angle), y, z: dist * Math.cos(angle) });
+    }, 16);
 
-  setTimeout(() => { spinning = false; }, 6000);
+    setTimeout(() => { spinning = false; }, 6000);
 
-  document.getElementById("graph").addEventListener("mousedown", () => {
-    spinning = false;
-  }, { once: true });
+    document.getElementById("graph").addEventListener("mousedown", () => {
+      spinning = false;
+    }, { once: true });
+  });
 }
 
 main();
