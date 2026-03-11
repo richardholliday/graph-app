@@ -12,12 +12,17 @@ Usage:
 from __future__ import annotations
 
 import json
+import os
 import sys
 from datetime import datetime, timezone
 
+import boto3
 import feedparser
 from anthropic import Anthropic
 from pydantic import BaseModel
+
+S3_BUCKET = os.environ.get("S3_BUCKET", "news-knowledge-graph")
+S3_KEY = "graph.json"
 
 # ---------------------------------------------------------------------------
 # Config
@@ -188,10 +193,29 @@ def main():
     graph["generated_at"] = datetime.now(timezone.utc).isoformat()
     print(f"Graph: {len(graph['nodes'])} nodes, {len(graph['links'])} links")
 
-    with open("graph.json", "w") as f:
-        json.dump(graph, f, indent=2)
-    print("Saved → graph.json")
-    print("\nTo view: python -m http.server 8000  then open http://localhost:8000")
+    graph_json = json.dumps(graph, indent=2)
+
+    # Write locally if not running in Lambda
+    if not os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+        with open("graph.json", "w") as f:
+            f.write(graph_json)
+        print("Saved → graph.json")
+
+    # Always upload to S3
+    s3 = boto3.client("s3")
+    s3.put_object(
+        Bucket=S3_BUCKET,
+        Key=S3_KEY,
+        Body=graph_json,
+        ContentType="application/json",
+        CacheControl="no-cache, no-store, must-revalidate",
+    )
+    print(f"Uploaded → s3://{S3_BUCKET}/{S3_KEY}")
+
+
+def lambda_handler(event, context):
+    main()
+    return {"statusCode": 200, "body": "Graph updated"}
 
 
 if __name__ == "__main__":
