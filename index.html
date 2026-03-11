@@ -183,6 +183,15 @@ async function main() {
     .linkDirectionalParticles(1)
     .linkDirectionalParticleWidth(1.5)
     .linkDirectionalParticleColor(link => LINK_COLOR[link.type] || LINK_COLOR.default)
+    .onNodeClick(node => {
+      const dist = 120;
+      const ratio = 1 + dist / Math.hypot(node.x, node.y, node.z);
+      G.cameraPosition(
+        { x: node.x * ratio, y: node.y * ratio, z: node.z * ratio },
+        node,
+        800
+      );
+    })
     .onNodeHover((node, e) => {
       document.body.style.cursor = node ? "pointer" : "default";
       if (node) showTooltip(e || { clientX: 0, clientY: 0 }, node.label, node.type, node.description);
