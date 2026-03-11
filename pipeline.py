@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import sys
+from datetime import datetime, timezone
 
 import feedparser
 from anthropic import Anthropic
@@ -184,6 +185,7 @@ def main():
     print(f"  Relationships: {len(extraction.relationships)}\n")
 
     graph = build_graph(extraction)
+    graph["generated_at"] = datetime.now(timezone.utc).isoformat()
     print(f"Graph: {len(graph['nodes'])} nodes, {len(graph['links'])} links")
 
     with open("graph.json", "w") as f:

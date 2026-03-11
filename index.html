@@ -218,8 +218,30 @@ async function main() {
     new THREE.PlaneGeometry(350, 55),
     new THREE.MeshBasicMaterial({ map: titleTex, transparent: true, depthWrite: false, side: THREE.DoubleSide })
   );
-  titleMesh.position.set(0, 220, 0);
+  titleMesh.position.set(0, 225, 0);
   G.scene().add(titleMesh);
+
+  // 3D sub-header — last feed timestamp
+  if (graph.generated_at) {
+    const ts = new Date(graph.generated_at).toLocaleString(undefined, {
+      dateStyle: 'medium', timeStyle: 'short'
+    });
+    const subCanvas = document.createElement('canvas');
+    subCanvas.width = 1024;
+    subCanvas.height = 80;
+    const sctx = subCanvas.getContext('2d');
+    sctx.font = '36px -apple-system, BlinkMacSystemFont, sans-serif';
+    sctx.textAlign = 'center';
+    sctx.fillStyle = '#94a3b8';
+    sctx.fillText(`Last updated: ${ts}`, 512, 52);
+    const subTex = new THREE.CanvasTexture(subCanvas);
+    const subMesh = new THREE.Mesh(
+      new THREE.PlaneGeometry(350, 28),
+      new THREE.MeshBasicMaterial({ map: subTex, transparent: true, depthWrite: false, side: THREE.DoubleSide })
+    );
+    subMesh.position.set(0, 185, 0);
+    G.scene().add(subMesh);
+  }
 
   // Stats
   document.getElementById("stats").textContent =
