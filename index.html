@@ -65,6 +65,14 @@
       white-space: nowrap;
     }
 
+    #version-badge {
+      margin-left: auto;
+      font-size: 10px;
+      color: rgba(224,224,224,0.25);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
     #toolbar-controls {
       display: flex;
       align-items: center;
@@ -414,6 +422,7 @@
   <div id="toolbar-top">
     <span id="site-title">News Knowledge Graph</span>
     <span id="site-subtitle"></span>
+    <span id="version-badge"></span>
   </div>
   <div id="toolbar-controls">
     <div id="search-wrap">
@@ -743,6 +752,7 @@ async function main() {
   setupSearch();
   setupPanelClose();
   updateSubtitle(data);
+  loadVersion();
 
   window.addEventListener('mousemove', e => {
     if (document.getElementById('tooltip').classList.contains('visible')) moveTooltip(e);
@@ -978,6 +988,16 @@ function updateSubtitle(data) {
   if (!data.generated_at) return;
   const ts = new Date(data.generated_at).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
   document.getElementById('site-subtitle').textContent = `Last updated: ${ts}`;
+}
+
+// ── Version ──────────────────────────────────────────────────────────────────
+
+async function loadVersion() {
+  try {
+    const res = await fetch('version.json', { cache: 'no-store' });
+    const { version } = await res.json();
+    document.getElementById('version-badge').textContent = version;
+  } catch (e) { /* silent — not critical */ }
 }
 
 // ── Auto-refresh ─────────────────────────────────────────────────────────────
