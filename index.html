@@ -595,7 +595,7 @@ async function main() {
   G.d3Force('charge').strength(-400);
   G.d3Force('link').distance(80);
 
-  G.onEngineStop(() => resetView());
+  G.onEngineStop(() => {});
 
   buildToolbar();
   buildFilterButtons();
