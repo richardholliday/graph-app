@@ -11,7 +11,7 @@
       --border: #2a2d3a;
       --text: #e0e0e0;
       --text-dim: rgba(224,224,224,0.55);
-      --toolbar-h: 56px;
+      --toolbar-h: 80px;
       --panel-w: 320px;
       --radius: 10px;
     }
@@ -36,12 +36,39 @@
       background: var(--surface);
       border-bottom: 1px solid var(--border);
       display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0 14px;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      padding: 8px 14px 6px;
       z-index: 200;
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
+    }
+
+    #toolbar-top {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #site-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+
+    #site-subtitle {
+      font-size: 11px;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+
+    #toolbar-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
@@ -299,17 +326,23 @@
 
 <!-- Toolbar -->
 <div id="toolbar">
-  <div id="search-wrap">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="opacity:0.4;flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input id="search-input" type="text" placeholder="Search entities…" autocomplete="off" spellcheck="false">
-    <button id="search-clear" title="Clear">×</button>
+  <div id="toolbar-top">
+    <span id="site-title">News Knowledge Graph</span>
+    <span id="site-subtitle"></span>
   </div>
-  <div id="filter-toggles"></div>
-  <div id="view-toggles">
-    <button class="toggle-btn" id="btn-community">Community colours</button>
-    <button class="toggle-btn" id="btn-sentiment">Sentiment links</button>
+  <div id="toolbar-controls">
+    <div id="search-wrap">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="opacity:0.4;flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="search-input" type="text" placeholder="Search entities…" autocomplete="off" spellcheck="false">
+      <button id="search-clear" title="Clear">×</button>
+    </div>
+    <div id="filter-toggles"></div>
+    <div id="view-toggles">
+      <button class="toggle-btn" id="btn-community">Community colours</button>
+      <button class="toggle-btn" id="btn-sentiment">Sentiment links</button>
+    </div>
+    <button id="reset-btn">⟳ Reset view</button>
   </div>
-  <button id="reset-btn">⟳ Reset view</button>
 </div>
 
 <!-- Side panel -->
@@ -511,7 +544,6 @@ function labelPropagation(data, iterations = 15) {
 // ── Graph setup ──────────────────────────────────────────────────────────────
 
 let G;
-let titleMesh, subMesh;
 let isTouchDevice = false;
 
 window.addEventListener('touchstart', () => { isTouchDevice = true; }, { once: true });
@@ -603,7 +635,7 @@ async function main() {
   updateStats(data);
   setupSearch();
   setupPanelClose();
-  add3DHeader(data);
+  updateSubtitle(data);
 
   window.addEventListener('mousemove', e => {
     if (document.getElementById('tooltip').classList.contains('visible')) moveTooltip(e);
@@ -820,59 +852,12 @@ function updateStats(data) {
     `${data.nodes.length} entities · ${data.links.length} relationships`;
 }
 
-// ── 3D scene header ──────────────────────────────────────────────────────────
+// ── Subtitle ─────────────────────────────────────────────────────────────────
 
-function makeTextMesh(text, w, h, canvasW, canvasH, font, color, glow) {
-  const canvas = document.createElement('canvas');
-  canvas.width = canvasW; canvas.height = canvasH;
-  const ctx = canvas.getContext('2d');
-  if (glow) { ctx.shadowColor = glow; ctx.shadowBlur = 30; }
-  ctx.font = font;
-  ctx.textAlign = 'center';
-  ctx.fillStyle = color;
-  ctx.fillText(text, canvasW / 2, canvasH * 0.72);
-  const tex = new THREE.CanvasTexture(canvas);
-  const mesh = new THREE.Mesh(
-    new THREE.PlaneGeometry(w, h),
-    new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, side: THREE.DoubleSide })
-  );
-  return { mesh, canvas, ctx, tex };
-}
-
-function add3DHeader(data) {
-  const { mesh: tm } = makeTextMesh(
-    'News Knowledge Graph', 350, 55, 1024, 160,
-    'bold 80px Arial, sans-serif', '#ffffff', '#60a5fa'
-  );
-  tm.position.set(0, 225, 0);
-  G.scene().add(tm);
-  titleMesh = tm;
-
-  updateTimestampMesh(data);
-}
-
-function updateTimestampMesh(data) {
+function updateSubtitle(data) {
   if (!data.generated_at) return;
   const ts = new Date(data.generated_at).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
-
-  if (!subMesh) {
-    const { mesh, tex } = makeTextMesh(
-      `Last updated: ${ts}`, 350, 35, 1024, 100,
-      'bold 42px Arial, sans-serif', '#94a3b8', null
-    );
-    mesh.position.set(0, 168, 0);
-    G.scene().add(mesh);
-    subMesh = mesh;
-  } else {
-    const canvas = subMesh.material.map.image;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.font = 'bold 42px Arial, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillStyle = '#94a3b8';
-    ctx.fillText(`Last updated: ${ts}`, canvas.width / 2, canvas.height * 0.72);
-    subMesh.material.map.needsUpdate = true;
-  }
+  document.getElementById('site-subtitle').textContent = `Last updated: ${ts}`;
 }
 
 // ── Auto-refresh ─────────────────────────────────────────────────────────────
@@ -888,7 +873,7 @@ async function checkForUpdates() {
       closePanel();
       state.hoveredNode = null;
       G.graphData(data);
-      updateTimestampMesh(data);
+      updateSubtitle(data);
       updateStats(data);
       renderLegend();
       flashRefreshBadge();
