@@ -667,9 +667,9 @@ async function main() {
     .nodeThreeObject(node => {
       const sprite = new SpriteText(node.label);
       sprite.color = '#cccccc';
-      sprite.textHeight = 4;
+      sprite.textHeight = 8;
       sprite.material.depthWrite = false;
-      sprite.position.y = nodeVal(node) * 0.75 + 10;
+      sprite.position.y = nodeVal(node) * 0.9 + 12;
       return sprite;
     })
     .linkColor(link => effectiveLinkColor(link))
@@ -717,6 +717,19 @@ async function main() {
   G.d3Force('link').distance(80);
 
   G.onEngineStop(() => {});
+  G.cameraPosition({ x: 0, y: 0, z: 450 });
+
+  // Enhance scene lighting for 3D sphere shading
+  const scene = G.scene();
+  scene.children
+    .filter(o => o.isAmbientLight)
+    .forEach(l => { l.intensity = 0.35; });
+  const keyLight = new THREE.DirectionalLight(0xffffff, 1.1);
+  keyLight.position.set(200, 300, 200);
+  scene.add(keyLight);
+  const fillLight = new THREE.DirectionalLight(0x6699cc, 0.35);
+  fillLight.position.set(-200, -150, -200);
+  scene.add(fillLight);
 
   buildToolbar();
   buildFilterButtons();
