@@ -310,14 +310,99 @@
 
     /* ── Mobile ── */
     @media (max-width: 640px) {
-      :root { --toolbar-h: 100px; --panel-w: 100vw; }
-      #toolbar { flex-wrap: wrap; height: auto; padding: 8px 10px; gap: 7px; }
-      #search-wrap { flex: 1 1 100%; }
-      #view-toggles { margin-left: 0; }
-      #side-panel { top: var(--toolbar-h); transform: translateY(100%); width: 100%; height: 60vh; top: auto; bottom: 0; border-left: none; border-top: 1px solid var(--border); }
+      :root { --panel-w: 100vw; }
+
+      #toolbar {
+        height: auto;
+        padding: 8px 12px;
+        gap: 6px;
+      }
+
+      #toolbar-top { width: 100%; }
+
+      #toolbar-controls {
+        width: 100%;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 6px;
+        padding-bottom: 2px;
+      }
+      #toolbar-controls::-webkit-scrollbar { display: none; }
+
+      #search-wrap { flex: 0 0 145px; }
+      #filter-toggles { flex-wrap: nowrap; flex-shrink: 0; }
+      #view-toggles { margin-left: 0; flex-shrink: 0; }
+
+      .filter-btn,
+      .toggle-btn,
+      #reset-btn {
+        min-height: 38px;
+        font-size: 11px;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      #side-panel {
+        width: 100%;
+        height: 62vh;
+        top: auto !important;
+        bottom: 0;
+        border-left: none;
+        border-top: 1px solid var(--border);
+        border-radius: 14px 14px 0 0;
+        transform: translateY(100%);
+      }
       #side-panel.open { transform: translateY(0); }
+
       #legend { display: none; }
+      #tooltip { display: none; }
+
+      #stats {
+        bottom: 10px;
+        font-size: 11px;
+        padding: 4px 12px;
+      }
     }
+
+    /* ── Touch hint ── */
+    #touch-hint {
+      display: none;
+      position: fixed;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15,17,23,0.85);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 8px 18px;
+      font-size: 12px;
+      color: var(--text-dim);
+      z-index: 300;
+      pointer-events: none;
+      white-space: nowrap;
+      animation: fadeHint 4s ease forwards;
+    }
+    @media (max-width: 640px) { #touch-hint { display: block; } }
+    @keyframes fadeHint {
+      0%   { opacity: 0; }
+       15% { opacity: 1; }
+      70%  { opacity: 1; }
+      100% { opacity: 0; }
+    }
+
+    /* ── Panel drag handle ── */
+    #panel-handle {
+      display: none;
+      width: 36px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin: 10px auto 0;
+      flex-shrink: 0;
+    }
+    @media (max-width: 640px) { #panel-handle { display: block; } }
   </style>
 </head>
 <body>
@@ -345,8 +430,12 @@
   </div>
 </div>
 
+<!-- Touch hint (mobile only) -->
+<div id="touch-hint">Drag to rotate · Pinch to zoom · Tap a node</div>
+
 <!-- Side panel -->
 <div id="side-panel">
+  <div id="panel-handle"></div>
   <div id="panel-header">
     <div>
       <div id="panel-label"></div>
@@ -632,6 +721,11 @@ async function main() {
   buildToolbar();
   buildFilterButtons();
   renderLegend();
+
+  if (window.innerWidth <= 640) {
+    document.getElementById('btn-community').textContent = 'Community';
+    document.getElementById('btn-sentiment').textContent = 'Sentiment';
+  }
   updateStats(data);
   setupSearch();
   setupPanelClose();
@@ -640,12 +734,21 @@ async function main() {
   window.addEventListener('mousemove', e => {
     if (document.getElementById('tooltip').classList.contains('visible')) moveTooltip(e);
   });
+  updateToolbarHeight();
   window.addEventListener('resize', () => {
+    updateToolbarHeight();
     G.width(window.innerWidth);
     G.height(window.innerHeight);
   });
 
   setInterval(checkForUpdates, 5 * 60 * 1000);
+}
+
+// ── Layout helpers ───────────────────────────────────────────────────────────
+
+function updateToolbarHeight() {
+  const h = document.getElementById('toolbar').offsetHeight;
+  document.documentElement.style.setProperty('--toolbar-h', h + 'px');
 }
 
 // ── Refresh colours without rebuilding graph ─────────────────────────────────
