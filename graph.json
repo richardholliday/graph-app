@@ -4,364 +4,340 @@
       "id": "united-states",
       "label": "United States",
       "type": "country",
-      "description": "Major belligerent in the US-Israel war against Iran; Trump administration calling for Iranian uprising"
-    },
-    {
-      "id": "israel",
-      "label": "Israel",
-      "type": "country",
-      "description": "US ally conducting joint bombing campaign against Iran; facing criticism over West Bank settler violence"
+      "description": "Major military power currently engaged in a war with Iran alongside Israel, also dealing with domestic events."
     },
     {
       "id": "iran",
       "label": "Iran",
       "type": "country",
-      "description": "Target of US-Israeli military campaign; civilians sheltering under bombardment"
+      "description": "Country under US-Israeli bombing campaign, experiencing civilian sheltering and wartime conditions."
     },
     {
-      "id": "donald-trump",
-      "label": "Donald Trump",
-      "type": "person",
-      "description": "US President who has called for an uprising in Iran during the ongoing war"
-    },
-    {
-      "id": "vladimir-putin",
-      "label": "Vladimir Putin",
-      "type": "person",
-      "description": "Russian president positioning himself as potential mediator in the Iran war"
+      "id": "israel",
+      "label": "Israel",
+      "type": "country",
+      "description": "Country allied with the US in the war against Iran, also facing criticism over West Bank settler violence."
     },
     {
       "id": "russia",
       "label": "Russia",
       "type": "country",
-      "description": "Seeking diplomatic and economic gains from the Iran war; accuses UK of helping Ukraine strike missile plant"
+      "description": "Country seeking diplomatic and economic gains from the Iran war, also targeted by Ukrainian strikes."
     },
     {
       "id": "ukraine",
       "label": "Ukraine",
       "type": "country",
-      "description": "Struck a Russian missile component plant; continues war against Russia"
+      "description": "Country that struck a Russian missile component plant, continuing its war against Russia."
     },
     {
       "id": "united-kingdom",
       "label": "United Kingdom",
       "type": "country",
-      "description": "Accused by Russia of assisting Ukraine strikes; joined EU in demanding Israel stop settler violence"
+      "description": "Accused by Russia of helping Ukraine strike, and demanding Israel stop settler violence in West Bank."
     },
     {
-      "id": "european-union",
-      "label": "European Union",
-      "type": "organisation",
-      "description": "Demanding Israel stop surge in West Bank settler violence since Iran war began"
-    },
-    {
-      "id": "g7",
-      "label": "G7",
-      "type": "organisation",
-      "description": "Group of nations agreeing to record release of emergency oil reserves due to price surge"
-    },
-    {
-      "id": "us-israel-iran-war",
-      "label": "US-Israel War with Iran",
-      "type": "event",
-      "description": "Ongoing military conflict involving US-Israeli bombing campaign against Iran, causing regional instability and global economic effects"
-    },
-    {
-      "id": "oil-price-surge",
-      "label": "Oil Price Surge",
-      "type": "event",
-      "description": "Surge in global oil prices triggered by the US-Israel war with Iran"
-    },
-    {
-      "id": "emergency-oil-release",
-      "label": "Emergency Oil Reserve Release",
-      "type": "event",
-      "description": "Record release of emergency oil reserves agreed by G7 nations to counter price surge"
-    },
-    {
-      "id": "west-bank-settler-violence",
-      "label": "West Bank Settler Violence",
-      "type": "event",
-      "description": "Surge in Israeli settler attacks in West Bank since Iran war began, killing six Palestinians"
-    },
-    {
-      "id": "iran-uprising-call",
-      "label": "Iran Uprising Call",
-      "type": "event",
-      "description": "Trump's call for an Iranian uprising, drawing parallels to Iraq 1991"
-    },
-    {
-      "id": "oslo-embassy-explosion",
-      "label": "US Embassy Explosion in Oslo",
-      "type": "event",
-      "description": "Explosion at the US embassy in Oslo; three brothers arrested, possible foreign state actor involvement"
-    },
-    {
-      "id": "norway",
-      "label": "Norway",
+      "id": "france",
+      "label": "France",
       "type": "country",
-      "description": "Location of the US embassy explosion in Oslo; investigating possible foreign state involvement"
-    },
-    {
-      "id": "ukraine-russia-strikes",
-      "label": "Ukraine Strike on Russian Plant",
-      "type": "event",
-      "description": "Ukraine hit a Russian missile component manufacturing plant"
-    },
-    {
-      "id": "mark-carney",
-      "label": "Mark Carney",
-      "type": "person",
-      "description": "Canadian Prime Minister inching closer to a parliamentary majority"
-    },
-    {
-      "id": "canada",
-      "label": "Canada",
-      "type": "country",
-      "description": "Canadian PM Carney gaining parliamentary support as MPs defect to Liberals"
-    },
-    {
-      "id": "liberal-party-canada",
-      "label": "Liberal Party of Canada",
-      "type": "organisation",
-      "description": "Governing party gaining MPs through floor crossings under Carney"
-    },
-    {
-      "id": "lori-idlout",
-      "label": "Lori Idlout",
-      "type": "person",
-      "description": "Former NDP MP who defected to the Liberals, the fourth to cross the floor"
-    },
-    {
-      "id": "dr-congo-drone-strikes",
-      "label": "DR Congo Drone Strikes",
-      "type": "event",
-      "description": "Drone strikes hit a residential building in Goma, killing a French aid worker and two others"
-    },
-    {
-      "id": "iran-football-asylum",
-      "label": "Iranian Football Delegation Asylum",
-      "type": "event",
-      "description": "Members of Iranian women's football delegation sought asylum in Australia; one reversed her decision"
+      "description": "A French aid worker was killed in drone strikes in DR Congo."
     },
     {
       "id": "australia",
       "label": "Australia",
       "type": "country",
-      "description": "Granted asylum visas to Iranian football delegation members; hosting Meghan Markle event"
+      "description": "Country that granted asylum to an Iranian football delegation member; also involved in trademark case."
     },
     {
-      "id": "jeffrey-epstein",
-      "label": "Jeffrey Epstein",
+      "id": "canada",
+      "label": "Canada",
+      "type": "country",
+      "description": "Country where PM Mark Carney's Liberals are inching closer to a majority government."
+    },
+    {
+      "id": "norway",
+      "label": "Norway",
+      "type": "country",
+      "description": "Country where an explosion occurred at the US embassy in Oslo, with potential foreign state actor involvement."
+    },
+    {
+      "id": "european-union",
+      "label": "European Union",
+      "type": "organisation",
+      "description": "Demanding Israel stop the surge in West Bank settler violence since the Iran war began."
+    },
+    {
+      "id": "g7",
+      "label": "G7",
+      "type": "organisation",
+      "description": "Group of nations that agreed to a record release of emergency oil reserves in response to price surges."
+    },
+    {
+      "id": "donald-trump",
+      "label": "Donald Trump",
       "type": "person",
-      "description": "Deceased financier whose estate is still controlled by two key aides amid allegations of complicity"
+      "description": "US President who called for an Iran uprising, drawing comparisons to Iraq 1991."
     },
     {
-      "id": "richard-kahn",
-      "label": "Richard Kahn",
+      "id": "vladimir-putin",
+      "label": "Vladimir Putin",
       "type": "person",
-      "description": "Co-administrator of Epstein's estate, alleged complicity in his crimes"
+      "description": "Russian President positioning himself as potential mediator in the Iran war while seeking gains."
     },
     {
-      "id": "darren-indyke",
-      "label": "Darren Indyke",
+      "id": "mark-carney",
+      "label": "Mark Carney",
       "type": "person",
-      "description": "Co-administrator of Epstein's estate, alleged complicity in his crimes"
+      "description": "Canadian Prime Minister whose Liberal Party is inching closer to a parliamentary majority."
     },
     {
-      "id": "dresden-bomb-defusal",
-      "label": "Dresden WW2 Bomb Defusal",
+      "id": "us-israel-iran-war",
+      "label": "US-Israel-Iran War",
       "type": "event",
-      "description": "Large WW2 British bomb defused after Dresden's biggest ever evacuation"
+      "description": "Ongoing military conflict where the US and Israel are conducting a bombing campaign against Iran, causing global repercussions."
     },
     {
-      "id": "georgia-runoff",
-      "label": "Georgia Special Election Runoff",
+      "id": "oil-price-surge",
+      "label": "Oil Price Surge",
       "type": "event",
-      "description": "Runoff election to replace Marjorie Taylor Greene between Republican Clay Fuller and Democrat Shawn Harris"
+      "description": "Surge in global oil prices caused by the US-Israel war with Iran."
+    },
+    {
+      "id": "emergency-oil-release",
+      "label": "Emergency Oil Reserve Release",
+      "type": "event",
+      "description": "Record release of emergency oil reserves by G7 nations to counter price surges."
+    },
+    {
+      "id": "west-bank-settler-violence",
+      "label": "West Bank Settler Violence",
+      "type": "event",
+      "description": "Surge in Israeli settler attacks in the West Bank since the Iran war began, killing six Palestinians."
+    },
+    {
+      "id": "oslo-embassy-explosion",
+      "label": "Oslo US Embassy Explosion",
+      "type": "event",
+      "description": "Explosion at the US embassy in Oslo, Norway; three brothers arrested, foreign state actor investigated."
+    },
+    {
+      "id": "ukraine-strike-russia",
+      "label": "Ukraine Strike on Russian Plant",
+      "type": "event",
+      "description": "Ukraine hit a Russian missile component manufacturing plant."
+    },
+    {
+      "id": "dr-congo-drone-strikes",
+      "label": "DR Congo Drone Strikes",
+      "type": "event",
+      "description": "Drone strikes hit a residential building in Goma, killing a French aid worker and two others."
+    },
+    {
+      "id": "iranian-football-asylum",
+      "label": "Iranian Football Delegation Asylum",
+      "type": "event",
+      "description": "Members of an Iranian football delegation sought and received asylum in Australia."
+    },
+    {
+      "id": "iran-uprising-call",
+      "label": "Trump's Iran Uprising Call",
+      "type": "event",
+      "description": "Trump called for an uprising in Iran, drawing parallels to the 1991 Iraq situation."
+    },
+    {
+      "id": "iraq-1991",
+      "label": "Iraq 1991 Uprising",
+      "type": "event",
+      "description": "Historical event where an uprising in Iraq after the Gulf War serves as a cautionary lesson."
+    },
+    {
+      "id": "lori-idlout",
+      "label": "Lori Idlout",
+      "type": "person",
+      "description": "Former NDP MP who defected to the Liberal Party in Canada."
+    },
+    {
+      "id": "liberal-party-canada",
+      "label": "Liberal Party of Canada",
+      "type": "organisation",
+      "description": "Canadian governing party under Mark Carney, gaining defectors and approaching a majority."
+    },
+    {
+      "id": "united-nations",
+      "label": "United Nations",
+      "type": "organisation",
+      "description": "Reports six Palestinians killed during settler attacks in the West Bank."
     }
   ],
   "links": [
     {
       "source": "united-states",
-      "target": "us-israel-iran-war",
-      "type": "involves",
-      "description": "The US is a major belligerent conducting bombing campaign against Iran"
+      "target": "iran",
+      "type": "threatens",
+      "description": "The US is conducting a bombing campaign against Iran as part of the US-Israel-Iran war."
     },
     {
       "source": "israel",
-      "target": "us-israel-iran-war",
-      "type": "involves",
-      "description": "Israel is conducting joint military operations with the US against Iran"
+      "target": "iran",
+      "type": "threatens",
+      "description": "Israel is allied with the US in the military campaign against Iran."
     },
     {
-      "source": "iran",
-      "target": "us-israel-iran-war",
-      "type": "involves",
-      "description": "Iran is the target of the US-Israeli military campaign"
+      "source": "united-states",
+      "target": "israel",
+      "type": "allies_with",
+      "description": "The US and Israel are jointly waging war against Iran."
     },
     {
-      "source": "donald-trump",
-      "target": "iran-uprising-call",
-      "type": "causes",
-      "description": "Trump called for an uprising within Iran during the ongoing war"
-    },
-    {
-      "source": "iran-uprising-call",
-      "target": "us-israel-iran-war",
-      "type": "caused_by",
-      "description": "The call for uprising is part of Trump's broader strategy in the Iran war"
+      "source": "us-israel-iran-war",
+      "target": "iran",
+      "type": "impacts",
+      "description": "Iran is under bombardment with civilians sheltering and streets near-empty."
     },
     {
       "source": "us-israel-iran-war",
       "target": "oil-price-surge",
       "type": "causes",
-      "description": "The war with Iran triggered a surge in global oil prices"
+      "description": "The war caused a surge in global oil prices."
     },
     {
       "source": "oil-price-surge",
       "target": "emergency-oil-release",
       "type": "causes",
-      "description": "Surging oil prices prompted G7 to agree on record emergency oil reserve release"
+      "description": "The oil price surge prompted G7 nations to release emergency oil reserves."
     },
     {
       "source": "g7",
       "target": "emergency-oil-release",
       "type": "involves",
-      "description": "G7 nations collectively agreed to the emergency oil release"
+      "description": "G7 nations agreed to a record release of emergency oil reserves."
+    },
+    {
+      "source": "donald-trump",
+      "target": "iran-uprising-call",
+      "type": "involves",
+      "description": "Trump called for an uprising inside Iran."
+    },
+    {
+      "source": "iran-uprising-call",
+      "target": "iraq-1991",
+      "type": "caused_by",
+      "description": "Trump's call draws direct parallels and cautionary lessons from the 1991 Iraq uprising."
     },
     {
       "source": "us-israel-iran-war",
       "target": "west-bank-settler-violence",
       "type": "causes",
-      "description": "Settler violence in the West Bank surged since the Iran war began"
+      "description": "The war triggered a surge in Israeli settler violence in the West Bank."
     },
     {
       "source": "european-union",
       "target": "israel",
       "type": "opposes",
-      "description": "EU demands Israel stop the surge in West Bank settler violence"
+      "description": "The EU demands Israel stop the surge in West Bank settler violence."
     },
     {
       "source": "united-kingdom",
       "target": "israel",
       "type": "opposes",
-      "description": "UK joined EU in demanding Israel stop settler violence in the West Bank"
+      "description": "The UK demands Israel stop settler violence in the West Bank."
     },
     {
-      "source": "west-bank-settler-violence",
-      "target": "israel",
+      "source": "united-nations",
+      "target": "west-bank-settler-violence",
       "type": "involves",
-      "description": "Israeli settlers are perpetrating violence against Palestinians in the West Bank"
+      "description": "The UN reports six Palestinians killed during settler attacks in the West Bank."
     },
     {
       "source": "russia",
       "target": "us-israel-iran-war",
       "type": "responds_to",
-      "description": "Russia seeks diplomatic and economic gains from the Iran war"
+      "description": "Russia seeks diplomatic and economic gains from the Iran war, with Putin positioning as mediator."
     },
     {
       "source": "vladimir-putin",
       "target": "us-israel-iran-war",
       "type": "negotiates_with",
-      "description": "Putin positions himself as potential mediator in the Iran conflict"
-    },
-    {
-      "source": "oslo-embassy-explosion",
-      "target": "united-states",
-      "type": "threatens",
-      "description": "Explosion targeted the US embassy in Oslo"
-    },
-    {
-      "source": "oslo-embassy-explosion",
-      "target": "norway",
-      "type": "located_in",
-      "description": "The embassy explosion occurred in Oslo, Norway"
+      "description": "Putin positions himself as a potential mediator in the Iran war."
     },
     {
       "source": "ukraine",
-      "target": "ukraine-russia-strikes",
+      "target": "russia",
+      "type": "threatens",
+      "description": "Ukraine struck a Russian missile component manufacturing plant."
+    },
+    {
+      "source": "ukraine",
+      "target": "ukraine-strike-russia",
       "type": "involves",
-      "description": "Ukraine conducted the strike on a Russian missile component plant"
+      "description": "Ukraine carried out the strike on the Russian plant."
     },
     {
       "source": "russia",
       "target": "united-kingdom",
       "type": "accuses",
-      "description": "Russia accuses UK of helping Ukraine carry out the missile plant strike"
+      "description": "Russia says the Ukrainian strike could not have been carried out without British help."
     },
     {
-      "source": "ukraine-russia-strikes",
-      "target": "russia",
+      "source": "oslo-embassy-explosion",
+      "target": "united-states",
       "type": "impacts",
-      "description": "The Ukrainian strike damaged a Russian missile component manufacturing facility"
+      "description": "An explosion targeted the US embassy in Oslo, Norway."
     },
     {
-      "source": "united-kingdom",
-      "target": "ukraine",
-      "type": "supports",
-      "description": "Russia alleges UK provided assistance enabling Ukraine's strike on Russian plant"
+      "source": "oslo-embassy-explosion",
+      "target": "norway",
+      "type": "located_in",
+      "description": "The explosion at the US embassy occurred in Oslo, Norway."
     },
     {
-      "source": "iran-football-asylum",
+      "source": "dr-congo-drone-strikes",
+      "target": "france",
+      "type": "impacts",
+      "description": "A French aid worker was among three killed in drone strikes in Goma, DR Congo."
+    },
+    {
+      "source": "iranian-football-asylum",
       "target": "australia",
       "type": "located_in",
-      "description": "Iranian football delegation members sought and received asylum in Australia"
+      "description": "Iranian football delegation members sought asylum in Australia."
     },
     {
-      "source": "iran-football-asylum",
+      "source": "iranian-football-asylum",
       "target": "iran",
       "type": "involves",
-      "description": "Members of Iran's women's football delegation fled to seek asylum"
+      "description": "Members of Iran's football delegation fled to seek asylum."
     },
     {
       "source": "mark-carney",
       "target": "liberal-party-canada",
       "type": "involves",
-      "description": "Carney leads the Liberal Party as PM, gaining parliamentary seats"
+      "description": "Mark Carney leads the Liberal Party of Canada as Prime Minister."
     },
     {
       "source": "lori-idlout",
       "target": "liberal-party-canada",
       "type": "supports",
-      "description": "Idlout defected from NDP to join the Liberal Party"
-    },
-    {
-      "source": "mark-carney",
-      "target": "canada",
-      "type": "involves",
-      "description": "Carney serves as Canadian Prime Minister"
-    },
-    {
-      "source": "richard-kahn",
-      "target": "jeffrey-epstein",
-      "type": "involves",
-      "description": "Kahn co-administers Epstein's estate and is alleged to be complicit in his crimes"
-    },
-    {
-      "source": "darren-indyke",
-      "target": "jeffrey-epstein",
-      "type": "involves",
-      "description": "Indyke co-administers Epstein's estate and is alleged to be complicit in his crimes"
+      "description": "Lori Idlout defected from the NDP to join the Liberals, bringing them closer to a majority."
     },
     {
       "source": "us-israel-iran-war",
-      "target": "iran",
-      "type": "impacts",
-      "description": "Iranian civilians sheltering under US-Israeli bombardment, streets near-empty"
-    },
-    {
-      "source": "donald-trump",
-      "target": "us-israel-iran-war",
+      "target": "donald-trump",
       "type": "involves",
-      "description": "Trump is leading US involvement in the war against Iran"
+      "description": "Trump is the US President overseeing the war against Iran."
     },
     {
       "source": "us-israel-iran-war",
       "target": "russia",
       "type": "impacts",
-      "description": "The Iran war creates diplomatic and economic opportunities for Russia"
+      "description": "The Iran war creates diplomatic and economic opportunities for Russia."
+    },
+    {
+      "source": "us-israel-iran-war",
+      "target": "oslo-embassy-explosion",
+      "type": "causes",
+      "description": "The explosion at the US embassy may be linked to broader geopolitical tensions from the Iran war; foreign state actor involvement is being investigated."
     }
   ],
-  "generated_at": "2026-03-11T18:52:29.888567+00:00"
+  "generated_at": "2026-03-11T19:38:18.558333+00:00"
 }
