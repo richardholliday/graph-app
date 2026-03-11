@@ -100,6 +100,7 @@
 <script type="module">
 import ForceGraph3D from 'https://esm.sh/3d-force-graph@1';
 import SpriteText from 'https://esm.sh/three-spritetext';
+import * as THREE from 'https://esm.sh/three';
 
 const COLOR = {
   person:       "#f97316",
@@ -196,6 +197,29 @@ async function main() {
   window.addEventListener("mousemove", e => {
     if (tooltip.classList.contains("visible")) moveTooltip(e);
   });
+
+  // 3D header — canvas texture on a plane, sits above the graph cloud
+  const titleCanvas = document.createElement('canvas');
+  titleCanvas.width = 1024;
+  titleCanvas.height = 160;
+  const ctx = titleCanvas.getContext('2d');
+
+  // Glowing text
+  ctx.clearRect(0, 0, 1024, 160);
+  ctx.font = 'bold 80px -apple-system, BlinkMacSystemFont, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.shadowColor = '#60a5fa';
+  ctx.shadowBlur = 30;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText('News Knowledge Graph', 512, 110);
+
+  const titleTex = new THREE.CanvasTexture(titleCanvas);
+  const titleMesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(350, 55),
+    new THREE.MeshBasicMaterial({ map: titleTex, transparent: true, depthWrite: false, side: THREE.DoubleSide })
+  );
+  titleMesh.position.set(0, 220, 0);
+  G.scene().add(titleMesh);
 
   // Stats
   document.getElementById("stats").textContent =
