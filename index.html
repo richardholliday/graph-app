@@ -512,7 +512,7 @@
     <div id="filter-toggles"></div>
     <div id="view-toggles">
       <button class="toggle-btn" id="btn-community">Community colours</button>
-      <button class="toggle-btn" id="btn-sentiment">Sentiment links</button>
+      <button class="toggle-btn on" id="btn-sentiment">Sentiment links</button>
     </div>
     <button id="reset-btn">⟳ Reset view</button>
   </div>
@@ -613,7 +613,7 @@ const state = {
   searchQuery: '',
   hiddenTypes: new Set(),
   colourMode: 'type',       // 'type' | 'community'
-  linkColourMode: 'type',   // 'type' | 'sentiment'
+  linkColourMode: 'sentiment',   // 'type' | 'sentiment'
   communities: new Map(),
 };
 
