@@ -455,6 +455,26 @@
       100% { opacity: 0; }
     }
 
+    /* ── Hint bar ── */
+    #hint-bar {
+      position: fixed;
+      top: calc(var(--toolbar-h) + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15,17,23,0.78);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 20px;
+      padding: 5px 16px;
+      font-size: 12px;
+      color: rgba(224,224,224,0.45);
+      z-index: 100;
+      pointer-events: none;
+      white-space: nowrap;
+      transition: opacity 0.6s ease;
+    }
+    #hint-bar.hidden { opacity: 0; }
+    @media (max-width: 640px) { #hint-bar { display: none; } }
+
     /* ── Panel drag handle ── */
     #panel-handle {
       display: none;
@@ -520,6 +540,9 @@
     <button id="reset-btn">⟳ Reset view</button>
   </div>
 </div>
+
+<!-- Hint bar (desktop) -->
+<div id="hint-bar">Click any node to explore its connections · Drag to rotate · Scroll to zoom</div>
 
 <!-- Touch hint (mobile only) -->
 <div id="touch-hint">Drag to rotate · Pinch to zoom · Tap a node</div>
@@ -779,6 +802,7 @@ async function main() {
       return !state.hiddenTypes.has(s) && !state.hiddenTypes.has(t);
     })
     .onNodeClick(node => {
+      document.getElementById('hint-bar').classList.add('hidden');
       openPanel(node);
       const ratio = 1 + 120 / Math.hypot(node.x, node.y, node.z);
       G.cameraPosition(
@@ -857,6 +881,7 @@ async function main() {
         topNode,
         0
       );
+      startPulse(topNode);
     }
   });
 
@@ -907,6 +932,43 @@ async function main() {
   });
 
   setInterval(checkForUpdates, 5 * 60 * 1000);
+}
+
+// ── Pulse animation on top node ──────────────────────────────────────────────
+
+function startPulse(node) {
+  const scene = G.scene();
+  const cam   = G.camera();
+  const color = new THREE.Color(NODE_COLOR[node.type] || '#f97316');
+
+  function spawnRing() {
+    const geo = new THREE.RingGeometry(1, 1.4, 48);
+    const mat = new THREE.MeshBasicMaterial({
+      color, transparent: true, opacity: 0.75, side: THREE.DoubleSide,
+    });
+    const ring = new THREE.Mesh(geo, mat);
+    ring.position.set(node.x || 0, node.y || 0, node.z || 0);
+    scene.add(ring);
+
+    const start    = Date.now();
+    const duration = 2200;
+    const maxScale = 18;
+
+    function tick() {
+      const t = (Date.now() - start) / duration;
+      if (t >= 1) { scene.remove(ring); geo.dispose(); mat.dispose(); return; }
+      const s = 1 + t * maxScale;
+      ring.scale.set(s, s, s);
+      mat.opacity = 0.75 * (1 - t);
+      ring.quaternion.copy(cam.quaternion);
+      requestAnimationFrame(tick);
+    }
+    tick();
+  }
+
+  spawnRing();
+  setTimeout(spawnRing,  900);
+  setTimeout(spawnRing, 1800);
 }
 
 // ── Layout helpers ───────────────────────────────────────────────────────────
