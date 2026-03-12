@@ -19,7 +19,6 @@ from datetime import datetime, timezone
 import boto3
 import feedparser
 from anthropic import Anthropic
-from pydantic import BaseModel
 
 S3_BUCKET = os.environ.get("S3_BUCKET", "news-knowledge-graph")
 S3_KEY = "graph.json"
@@ -38,29 +37,6 @@ RSS_FEEDS = [
 ]
 
 MAX_ARTICLES_PER_FEED = 4  # sample evenly across feeds
-
-# ---------------------------------------------------------------------------
-# Structured output schemas
-# ---------------------------------------------------------------------------
-
-class Entity(BaseModel):
-    id: str           # lowercase-hyphenated slug, e.g. "joe-biden"
-    label: str        # display name, e.g. "Joe Biden"
-    type: str         # person | organisation | country | event | concept
-    description: str  # one sentence
-
-
-class Relationship(BaseModel):
-    source: str       # entity id
-    target: str       # entity id
-    type: str         # causes | involves | opposes | supports | threatens | etc.
-    description: str  # one sentence
-
-
-class GraphExtraction(BaseModel):
-    entities: list[Entity]
-    relationships: list[Relationship]
-
 
 # ---------------------------------------------------------------------------
 # Fetch
@@ -112,10 +88,15 @@ Rules:
 - Every relationship source and target MUST reference an ID that exists in your entities list
 - Aim for 15–30 entities and 20–40 relationships
 - Prefer depth (chains of causation) over breadth
-"""
+
+Respond with ONLY a JSON object in this exact format, no other text:
+{
+  "entities": [{"id": "...", "label": "...", "type": "...", "description": "..."}],
+  "relationships": [{"source": "...", "target": "...", "type": "...", "description": "..."}]
+}"""
 
 
-def extract_graph(articles: list[dict]) -> GraphExtraction:
+def extract_graph(articles: list[dict]) -> dict:
     client = Anthropic()
 
     articles_text = "\n\n".join(
@@ -123,7 +104,7 @@ def extract_graph(articles: list[dict]) -> GraphExtraction:
         for i, a in enumerate(articles)
     )
 
-    response = client.messages.parse(
+    response = client.messages.create(
         model="claude-sonnet-4-6",
         max_tokens=8192,
         system=SYSTEM_PROMPT,
@@ -134,42 +115,45 @@ def extract_graph(articles: list[dict]) -> GraphExtraction:
                 f"{articles_text}"
             ),
         }],
-        output_format=GraphExtraction,
     )
 
-    return response.parsed_output
+    text = response.content[0].text.strip()
+    # Strip markdown code fences if present
+    if text.startswith("```"):
+        text = text.split("\n", 1)[1].rsplit("```", 1)[0]
+    return json.loads(text)
 
 
 # ---------------------------------------------------------------------------
 # Build final graph (validate + clean)
 # ---------------------------------------------------------------------------
 
-def build_graph(extraction: GraphExtraction) -> dict:
-    node_ids = {e.id for e in extraction.entities}
+def build_graph(extraction: dict) -> dict:
+    node_ids = {e["id"] for e in extraction["entities"]}
 
     nodes = [
         {
-            "id": e.id,
-            "label": e.label,
-            "type": e.type,
-            "description": e.description,
+            "id": e["id"],
+            "label": e["label"],
+            "type": e["type"],
+            "description": e["description"],
         }
-        for e in extraction.entities
+        for e in extraction["entities"]
     ]
 
     links = []
     skipped = 0
-    for rel in extraction.relationships:
-        if rel.source not in node_ids or rel.target not in node_ids:
+    for rel in extraction["relationships"]:
+        if rel["source"] not in node_ids or rel["target"] not in node_ids:
             skipped += 1
             continue
-        if rel.source == rel.target:
+        if rel["source"] == rel["target"]:
             continue
         links.append({
-            "source": rel.source,
-            "target": rel.target,
-            "type": rel.type,
-            "description": rel.description,
+            "source": rel["source"],
+            "target": rel["target"],
+            "type": rel["type"],
+            "description": rel["description"],
         })
 
     if skipped:
@@ -189,8 +173,8 @@ def main():
 
     print("Extracting graph with Claude Sonnet 4.6...")
     extraction = extract_graph(articles)
-    print(f"  Entities: {len(extraction.entities)}")
-    print(f"  Relationships: {len(extraction.relationships)}\n")
+    print(f"  Entities: {len(extraction['entities'])}")
+    print(f"  Relationships: {len(extraction['relationships'])}\n")
 
     graph = build_graph(extraction)
     graph["generated_at"] = datetime.now(timezone.utc).isoformat()
