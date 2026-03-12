@@ -217,6 +217,12 @@ def main():
 
 
 def lambda_handler(event, context):
+    # Quiet hours: midnight–6am EST (UTC-5) — skip to control costs
+    utc_hour = datetime.now(timezone.utc).hour
+    est_hour = (utc_hour - 5) % 24
+    if 0 <= est_hour < 6:
+        print(f"Quiet hours ({est_hour:02d}:xx EST) — skipping run")
+        return {"statusCode": 200, "body": "Skipped (quiet hours)"}
     main()
     return {"statusCode": 200, "body": "Graph updated"}
 
