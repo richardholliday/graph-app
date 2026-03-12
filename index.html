@@ -757,7 +757,8 @@ async function main() {
       sprite.color = '#cccccc';
       sprite.textHeight = 8;
       sprite.material.depthWrite = false;
-      sprite.position.y = nodeVal(node) * 0.9 + 12;
+      node.__labelSprite = sprite;
+      sprite.position.y = nodeVal(node) * 0.9 + 12; // default until sim settles
       return sprite;
     })
     .linkColor(link => effectiveLinkColor(link))
@@ -810,6 +811,35 @@ async function main() {
   G.onEngineStop(() => {
     if (initialFocusDone) return;
     initialFocusDone = true;
+    // Reposition each label away from its neighbours
+    G.graphData().nodes.forEach(node => {
+      if (!node.__labelSprite) return;
+      const offset = nodeVal(node) * 0.9 + 12;
+      const neighbours = [...(adjSet.get(node.id) || [])]
+        .map(id => nodeById.get(id)).filter(Boolean);
+
+      if (!neighbours.length) {
+        node.__labelSprite.position.set(0, offset, 0);
+        return;
+      }
+
+      let dx = 0, dy = 0, dz = 0;
+      neighbours.forEach(n => {
+        dx += (n.x || 0) - (node.x || 0);
+        dy += (n.y || 0) - (node.y || 0);
+        dz += (n.z || 0) - (node.z || 0);
+      });
+
+      // Point away from neighbours, with a slight upward bias
+      let nx = -dx, ny = -dy + Math.abs(dx) * 0.3, nz = -dz;
+      const len = Math.hypot(nx, ny, nz) || 1;
+      node.__labelSprite.position.set(
+        (nx / len) * offset,
+        (ny / len) * offset,
+        (nz / len) * offset
+      );
+    });
+
     const ls = document.getElementById('loading-screen');
     ls.classList.add('done');
     setTimeout(() => ls.remove(), 700);
