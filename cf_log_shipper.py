@@ -15,6 +15,48 @@ logs_client = boto3.client('logs')
 
 LOG_GROUP = '/driftforge/cloudfront'
 
+EDGE_CITIES = {
+    # North America
+    'ATL': 'Atlanta', 'BOS': 'Boston', 'CMH': 'Columbus', 'DEN': 'Denver',
+    'DFW': 'Dallas', 'DTW': 'Detroit', 'EWR': 'Newark', 'HIO': 'Portland',
+    'IAD': 'Washington DC', 'IAH': 'Houston', 'JFK': 'New York', 'LAX': 'Los Angeles',
+    'LAS': 'Las Vegas', 'MCI': 'Kansas City', 'MIA': 'Miami', 'MSP': 'Minneapolis',
+    'MSY': 'New Orleans', 'ORD': 'Chicago', 'PDX': 'Portland', 'PHX': 'Phoenix',
+    'SDF': 'Louisville', 'SEA': 'Seattle', 'SFO': 'San Francisco', 'SJC': 'San Jose',
+    'SLC': 'Salt Lake City', 'STL': 'St. Louis', 'YTO': 'Toronto', 'YUL': 'Montreal',
+    'YVR': 'Vancouver', 'YYC': 'Calgary', 'YYZ': 'Toronto',
+    # Europe
+    'AMS': 'Amsterdam', 'ARN': 'Stockholm', 'ATH': 'Athens', 'BCN': 'Barcelona',
+    'BEG': 'Belgrade', 'BER': 'Berlin', 'BRU': 'Brussels', 'BUD': 'Budapest',
+    'CPH': 'Copenhagen', 'DUB': 'Dublin', 'DUS': 'Düsseldorf', 'EDI': 'Edinburgh',
+    'FCO': 'Rome', 'FRA': 'Frankfurt', 'GVA': 'Geneva', 'HAM': 'Hamburg',
+    'HEL': 'Helsinki', 'IST': 'Istanbul', 'LHR': 'London', 'LIS': 'Lisbon',
+    'MAD': 'Madrid', 'MAN': 'Manchester', 'MRS': 'Marseille', 'MXP': 'Milan',
+    'OSL': 'Oslo', 'OTP': 'Bucharest', 'PRG': 'Prague', 'SOF': 'Sofia',
+    'TXL': 'Berlin', 'VIE': 'Vienna', 'WAW': 'Warsaw', 'ZAG': 'Zagreb',
+    'ZRH': 'Zurich', 'CDG': 'Paris',
+    # Asia Pacific
+    'BKK': 'Bangkok', 'BLR': 'Bangalore', 'BOM': 'Mumbai', 'CCU': 'Kolkata',
+    'CGK': 'Jakarta', 'CMB': 'Colombo', 'DEL': 'Delhi', 'HAN': 'Hanoi',
+    'HKG': 'Hong Kong', 'HYD': 'Hyderabad', 'ICN': 'Seoul', 'KIX': 'Osaka',
+    'KUL': 'Kuala Lumpur', 'MAA': 'Chennai', 'MNL': 'Manila', 'NRT': 'Tokyo',
+    'PER': 'Perth', 'PNQ': 'Pune', 'SEL': 'Seoul', 'SGN': 'Ho Chi Minh City',
+    'SIN': 'Singapore', 'SYD': 'Sydney', 'TPE': 'Taipei', 'MEL': 'Melbourne',
+    'AKL': 'Auckland',
+    # Middle East & Africa
+    'BAH': 'Bahrain', 'CAI': 'Cairo', 'CPT': 'Cape Town', 'DME': 'Moscow',
+    'DXB': 'Dubai', 'JNB': 'Johannesburg', 'LOS': 'Lagos', 'TLV': 'Tel Aviv',
+    # South America
+    'BOG': 'Bogotá', 'EZE': 'Buenos Aires', 'GRU': 'São Paulo',
+    'LIM': 'Lima', 'SCL': 'Santiago',
+}
+
+
+def edge_to_city(edge: str) -> str:
+    code = edge[:3].upper()
+    return EDGE_CITIES.get(code, code)
+
+
 BOT_PATTERNS = [
     'bot', 'crawler', 'spider', 'checker', 'curl', 'python',
     'wget', 'scrapy', 'headless', 'phantomjs', 'selenium',
@@ -49,6 +91,7 @@ def parse_line(line: str) -> dict | None:
             'method':      parts[COL['method']],
             'uri':         parts[COL['uri']],
             'status':      int(parts[COL['status']]),
+            'city':        edge_to_city(parts[COL['edge']]),
             'result_type': parts[COL['result_type']],
             'time_taken':  float(parts[COL['time_taken']]) if parts[COL['time_taken']] != '-' else 0,
             'bytes_sent':  int(parts[COL['bytes_sent']]) if parts[COL['bytes_sent']] != '-' else 0,
