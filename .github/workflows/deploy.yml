@@ -28,6 +28,7 @@ jobs:
         run: |
           aws s3 cp index.html s3://news-knowledge-graph/ --content-type "text/html; charset=utf-8"
           aws s3 cp version.json s3://news-knowledge-graph/ --content-type "application/json" --cache-control "no-cache, no-store, must-revalidate"
+          aws s3 cp favicon.svg s3://news-knowledge-graph/ --content-type "image/svg+xml" --cache-control "max-age=86400"
 
       - name: Invalidate CloudFront
         env:

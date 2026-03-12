@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="5" fill="#0f1117"/>
+  <!-- Connecting lines -->
+  <line x1="16" y1="5"  x2="5"  y2="17" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="16" y1="5"  x2="27" y2="17" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="16" y1="5"  x2="16" y2="21" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="5"  y1="17" x2="16" y2="21" stroke="rgba(255,255,255,0.18)" stroke-width="1"   stroke-linecap="round"/>
+  <line x1="27" y1="17" x2="16" y2="21" stroke="rgba(255,255,255,0.18)" stroke-width="1"   stroke-linecap="round"/>
+  <line x1="5"  y1="17" x2="10" y2="27" stroke="rgba(255,255,255,0.15)" stroke-width="1"   stroke-linecap="round"/>
+  <line x1="16" y1="21" x2="10" y2="27" stroke="rgba(255,255,255,0.15)" stroke-width="1"   stroke-linecap="round"/>
+  <!-- Nodes -->
+  <circle cx="16" cy="5"  r="4"   fill="#f97316"/>
+  <circle cx="5"  cy="17" r="3"   fill="#3b82f6"/>
+  <circle cx="27" cy="17" r="3"   fill="#22c55e"/>
+  <circle cx="16" cy="21" r="3.5" fill="#a855f7"/>
+  <circle cx="10" cy="27" r="2"   fill="#64748b"/>
+</svg>
