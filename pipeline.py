@@ -32,6 +32,9 @@ RSS_FEEDS = [
     "http://feeds.bbci.co.uk/news/world/rss.xml",
     "https://feeds.npr.org/1001/rss.xml",
     "https://www.theguardian.com/world/rss",
+    "https://www.aljazeera.com/xml/rss/all.xml",
+    "https://rss.dw.com/rdf/rss-en-world",
+    "https://www.france24.com/en/rss",
 ]
 
 MAX_ARTICLES = 20  # keep costs reasonable for a POC
