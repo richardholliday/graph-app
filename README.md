@@ -57,14 +57,42 @@ CloudFront (E3TCZ7VBIYU9VB)
     └── driftforge.cloud  (Route 53 → ACM certificate)
 ```
 
+### Visitor analytics
+
+CloudFront access logging is enabled. Logs are written as gzipped TSV files to the `news-knowledge-graph-logs` S3 bucket under `cf-logs/`. A second Lambda (`cf_log_shipper`) is triggered by S3 on each new log file and:
+
+1. Parses the gzipped CloudFront W3C log format
+2. Enriches each event with a `city` field decoded from the CloudFront edge location code
+3. Classifies requests as bot or human based on user-agent strings
+4. Ships structured JSON events to CloudWatch Logs (`/driftforge/cloudfront`), batched per log file into individual log streams
+5. Checks each new human IP against a known-IP list stored at `s3://news-knowledge-graph-logs/known-ips.json`
+6. Publishes an SNS alert for any IP not seen before (new visitor notification)
+
+Logs are retained for 90 days in CloudWatch. The known-IP list is updated in S3 after each run.
+
+```
+S3 (news-knowledge-graph-logs)
+    ├── cf-logs/          ← CloudFront access logs (gzipped TSV)
+    └── known-ips.json    ← Seen human IPs (for new visitor alerts)
+
+Lambda (cf_log_shipper)
+    ├── Triggered by: S3 PutObject on cf-logs/
+    ├── Writes to:    CloudWatch Logs /driftforge/cloudfront
+    └── Alerts via:   SNS topic driftforge-alerts → email
+```
+
 ### AWS resources
 
 | Resource | Name / ID |
 |---|---|
-| S3 bucket | `news-knowledge-graph` |
+| S3 bucket (site) | `news-knowledge-graph` |
+| S3 bucket (logs) | `news-knowledge-graph-logs` |
 | CloudFront distribution | `E3TCZ7VBIYU9VB` |
-| Lambda function | `graph-pipeline` |
+| Lambda function (pipeline) | `graph-pipeline` |
+| Lambda function (log shipper) | `cf_log_shipper` |
 | EventBridge rule | `graph-pipeline-hourly` |
+| CloudWatch log group | `/driftforge/cloudfront` |
+| SNS topic | `driftforge-alerts` |
 | IAM role (Lambda) | `graph-pipeline-lambda-role` |
 | IAM user (deploy) | `graph-app-deploy` |
 | Domain | `driftforge.cloud` (Route 53) |
@@ -102,6 +130,7 @@ open http://localhost:8080
 graph-app/
 ├── index.html          # Single-file frontend
 ├── pipeline.py         # Data pipeline (RSS → Claude → S3)
+├── cf_log_shipper.py   # Lambda: CloudFront logs → CloudWatch + SNS alerts
 ├── requirements.txt    # Python dependencies
 ├── graph.json          # Latest graph data (generated)
 ├── version.json        # Build metadata (generated)
