@@ -562,7 +562,7 @@ function buildAdjacency(data) {
 }
 
 function nodeVal(node) {
-  return Math.max(4, (degreeMap[node.id] || 0) * 2);
+  return Math.max(4, (degreeMap[node.id] || 0) ** 2 + 4);
 }
 
 function getNodeColor(node) {
