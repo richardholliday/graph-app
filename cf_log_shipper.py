@@ -12,8 +12,12 @@ from urllib.parse import unquote_plus
 
 s3_client   = boto3.client('s3')
 logs_client = boto3.client('logs')
+sns_client  = boto3.client('sns')
 
-LOG_GROUP = '/driftforge/cloudfront'
+LOG_GROUP    = '/driftforge/cloudfront'
+KNOWN_IPS_BUCKET = 'news-knowledge-graph-logs'
+KNOWN_IPS_KEY    = 'known-ips.json'
+SNS_TOPIC_ARN    = 'arn:aws:sns:us-east-1:597062269817:driftforge-alerts'
 
 EDGE_CITIES = {
     # North America
@@ -104,6 +108,32 @@ def parse_line(line: str) -> dict | None:
         return None
 
 
+def load_known_ips() -> set:
+    try:
+        obj = s3_client.get_object(Bucket=KNOWN_IPS_BUCKET, Key=KNOWN_IPS_KEY)
+        return set(json.loads(obj['Body'].read()))
+    except s3_client.exceptions.NoSuchKey:
+        return set()
+
+
+def save_known_ips(ips: set):
+    s3_client.put_object(
+        Bucket=KNOWN_IPS_BUCKET,
+        Key=KNOWN_IPS_KEY,
+        Body=json.dumps(sorted(ips)),
+        ContentType='application/json',
+    )
+
+
+def alert_new_ip(ip: str, city: str, ua: str):
+    sns_client.publish(
+        TopicArn=SNS_TOPIC_ARN,
+        Subject=f'New visitor — driftforge.cloud',
+        Message=f'New IP address seen on driftforge.cloud\n\nIP:       {ip}\nLocation: {city}\nDevice:   {ua[:120]}',
+    )
+    print(f"Alert sent for new IP: {ip} ({city})")
+
+
 def ensure_log_group():
     try:
         logs_client.create_log_group(logGroupName=LOG_GROUP)
@@ -146,6 +176,8 @@ def ship_events(log_stream: str, events: list[dict]):
 
 def lambda_handler(event, context):
     ensure_log_group()
+    known_ips = load_known_ips()
+    new_ips_found = False
 
     for record in event['Records']:
         bucket = record['s3']['bucket']['name']
@@ -163,7 +195,20 @@ def lambda_handler(event, context):
             print("No valid entries found")
             continue
 
+        # Check for new human IPs
+        for entry in entries:
+            if entry['is_bot']:
+                continue
+            ip = entry['client_ip']
+            if ip not in known_ips:
+                known_ips.add(ip)
+                new_ips_found = True
+                alert_new_ip(ip, entry['city'], entry['user_agent'])
+
         log_stream = key.replace('/', '_').replace('.gz', '')
         ship_events(log_stream, entries)
+
+    if new_ips_found:
+        save_known_ips(known_ips)
 
     return {'statusCode': 200, 'body': 'Done'}
