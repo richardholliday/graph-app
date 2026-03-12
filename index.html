@@ -231,6 +231,7 @@
     .conn-item:hover { color: #fff; }
     .conn-item:last-child { border-bottom: none; }
     .conn-label { flex: 1; font-weight: 500; }
+    .conn-dir { font-size: 13px; opacity: 0.4; flex-shrink: 0; }
     .conn-type {
       font-size: 10px;
       padding: 2px 7px;
@@ -1084,6 +1085,7 @@ function openPanel(node) {
       item.innerHTML = `
         <div class="conn-dot" style="background:${NODE_COLOR[other.type] || '#64748b'}"></div>
         <span class="conn-label">${other.label}</span>
+        <span class="conn-dir">${(l.source.id ?? l.source) === node.id ? '→' : '←'}</span>
         <span class="conn-type">${l.type.replace(/_/g, ' ')}</span>`;
       item.addEventListener('click', () => openPanel(other));
       list.appendChild(item);
