@@ -37,7 +37,7 @@ RSS_FEEDS = [
     "https://www.france24.com/en/rss",
 ]
 
-MAX_ARTICLES = 20  # keep costs reasonable for a POC
+MAX_ARTICLES_PER_FEED = 4  # sample evenly across feeds
 
 # ---------------------------------------------------------------------------
 # Structured output schemas
@@ -66,15 +66,14 @@ class GraphExtraction(BaseModel):
 # Fetch
 # ---------------------------------------------------------------------------
 
-def fetch_articles(max_articles: int = MAX_ARTICLES) -> list[dict]:
+def fetch_articles(max_per_feed: int = MAX_ARTICLES_PER_FEED) -> list[dict]:
     articles: list[dict] = []
     for feed_url in RSS_FEEDS:
-        if len(articles) >= max_articles:
-            break
         try:
             feed = feedparser.parse(feed_url)
+            count = 0
             for entry in feed.entries:
-                if len(articles) >= max_articles:
+                if count >= max_per_feed:
                     break
                 title = entry.get("title", "").strip()
                 summary = entry.get("summary", "").strip()
@@ -84,10 +83,11 @@ def fetch_articles(max_articles: int = MAX_ARTICLES) -> list[dict]:
                         "summary": summary,
                         "link": entry.get("link", ""),
                     })
-            print(f"  {feed_url}: {len(feed.entries)} entries")
+                    count += 1
+            print(f"  {feed_url}: {len(feed.entries)} entries, took {count}")
         except Exception as exc:
             print(f"  Warning: could not fetch {feed_url}: {exc}", file=sys.stderr)
-    return articles[:max_articles]
+    return articles
 
 
 # ---------------------------------------------------------------------------
@@ -124,7 +124,7 @@ def extract_graph(articles: list[dict]) -> GraphExtraction:
     )
 
     response = client.messages.parse(
-        model="claude-opus-4-6",
+        model="claude-sonnet-4-6",
         max_tokens=8192,
         system=SYSTEM_PROMPT,
         messages=[{
@@ -187,7 +187,7 @@ def main():
     articles = fetch_articles()
     print(f"Fetched {len(articles)} articles\n")
 
-    print("Extracting graph with Claude Opus 4.6...")
+    print("Extracting graph with Claude Sonnet 4.6...")
     extraction = extract_graph(articles)
     print(f"  Entities: {len(extraction.entities)}")
     print(f"  Relationships: {len(extraction.relationships)}\n")
