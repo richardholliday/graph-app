@@ -1363,9 +1363,19 @@ main();
 
 // ── About modal ───────────────────────────────────────────────────────────────
 const aboutBackdrop = document.getElementById('about-backdrop');
-document.getElementById('about-btn').addEventListener('click', () => aboutBackdrop.classList.add('open'));
+document.getElementById('about-btn').addEventListener('click', () => {
+  track('about-open');
+  aboutBackdrop.classList.add('open');
+});
 document.getElementById('about-close').addEventListener('click', () => aboutBackdrop.classList.remove('open'));
 aboutBackdrop.addEventListener('click', e => { if (e.target === aboutBackdrop) aboutBackdrop.classList.remove('open'); });
+document.getElementById('about-linkedin').addEventListener('click', () => track('about-linkedin'));
+document.querySelector('#about-modal a[href*="github"]').addEventListener('click', () => track('about-github'));
+
+// ── Tracking ─────────────────────────────────────────────────────────────────
+function track(event) {
+  fetch(`/t/${event}`, { method: 'HEAD' }).catch(() => {});
+}
 </script>
 </body>
 </html>
