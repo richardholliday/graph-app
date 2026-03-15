@@ -1490,8 +1490,15 @@ async function runFlyover() {
   markFlyoverDone();
 
   if (!cancelled) {
-    // Reset to overview
-    resetView();
+    // Settle on the top node at a close viewing distance
+    const topNode = nodes[0];
+    const dist  = 160;
+    const mag   = Math.hypot(topNode.x || 0, topNode.y || 0, topNode.z || 0) || 1;
+    const ratio = (mag + dist) / mag;
+    G.cameraPosition(
+      { x: topNode.x * ratio, y: topNode.y * ratio, z: topNode.z * ratio },
+      topNode, 1200
+    );
   }
 }
 
