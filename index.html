@@ -550,6 +550,48 @@
       line-height: 1.7;
     }
 
+    /* ── Flyover ── */
+    #flyover-bar {
+      position: fixed;
+      bottom: 48px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15,17,23,0.88);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 7px 8px 7px 16px;
+      font-size: 12px;
+      color: var(--text-dim);
+      z-index: 300;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      white-space: nowrap;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    #flyover-bar.active { display: flex; }
+    #flyover-label { flex: 1; }
+    #flyover-dots { display: flex; gap: 5px; }
+    .flyover-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      transition: background 0.3s;
+    }
+    .flyover-dot.active { background: #60a5fa; }
+    #flyover-skip {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      color: var(--text-dim);
+      font-size: 11px;
+      padding: 3px 10px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    #flyover-skip:hover { background: rgba(255,255,255,0.15); color: var(--text); }
+
     /* ── Hint bar ── */
     #hint-bar {
       position: fixed;
@@ -673,6 +715,13 @@
 <div id="legend">
   <div id="legend-nodes"></div>
   <div id="legend-links"></div>
+</div>
+
+<!-- Flyover bar -->
+<div id="flyover-bar">
+  <span id="flyover-label">Exploring the graph…</span>
+  <div id="flyover-dots"></div>
+  <button id="flyover-skip">Skip</button>
 </div>
 
 <!-- Stats / refresh -->
@@ -996,7 +1045,7 @@ async function main() {
 
     const ls = document.getElementById('loading-screen');
     ls.classList.add('done');
-    setTimeout(() => ls.remove(), 700);
+    setTimeout(() => { ls.remove(); runFlyover(); }, 700);
     const topNode = G.graphData().nodes.reduce((best, n) =>
       (degreeMap[n.id] || 0) > (degreeMap[best?.id] || 0) ? n : best, null);
     if (topNode?.x !== undefined) {
@@ -1360,6 +1409,91 @@ function flashRefreshBadge() {
 }
 
 main();
+
+// ── Flyover ──────────────────────────────────────────────────────────────────
+
+function shouldRunFlyover() {
+  try { return !localStorage.getItem('flyover-done'); } catch { return false; }
+}
+function markFlyoverDone() {
+  try { localStorage.setItem('flyover-done', '1'); } catch {}
+}
+
+async function runFlyover() {
+  if (!shouldRunFlyover()) return;
+
+  // Pick top 4 nodes by degree
+  const nodes = [...G.graphData().nodes]
+    .sort((a, b) => (degreeMap[b.id] || 0) - (degreeMap[a.id] || 0))
+    .slice(0, 4);
+
+  if (nodes.length < 2) return;
+
+  const bar    = document.getElementById('flyover-bar');
+  const label  = document.getElementById('flyover-label');
+  const dots   = document.getElementById('flyover-dots');
+  const skip   = document.getElementById('flyover-skip');
+
+  // Build dots
+  nodes.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'flyover-dot';
+    d.id = `fdot-${i}`;
+    dots.appendChild(d);
+  });
+
+  bar.classList.add('active');
+
+  let cancelled = false;
+  const cancel = () => { cancelled = true; };
+  skip.addEventListener('click', cancel, { once: true });
+
+  const wait = ms => new Promise(res => {
+    const t = setTimeout(res, ms);
+    // Check cancellation every 100ms
+    const check = setInterval(() => { if (cancelled) { clearTimeout(t); clearInterval(check); res(); } }, 100);
+    setTimeout(() => clearInterval(check), ms + 50);
+  });
+
+  for (let i = 0; i < nodes.length; i++) {
+    if (cancelled) break;
+    const node = nodes[i];
+
+    // Update dot
+    document.querySelectorAll('.flyover-dot').forEach(d => d.classList.remove('active'));
+    document.getElementById(`fdot-${i}`)?.classList.add('active');
+    label.textContent = node.label;
+
+    // Fly to node — a bit further out than the click handler so connections are visible
+    const dist = 180;
+    const mag  = Math.hypot(node.x || 0, node.y || 0, node.z || 0) || 1;
+    const ratio = (mag + dist) / mag;
+    G.cameraPosition(
+      { x: node.x * ratio, y: node.y * ratio, z: node.z * ratio },
+      node, 1800
+    );
+
+    await wait(2000);
+    if (cancelled) break;
+
+    // Open panel
+    openPanel(node);
+    await wait(4200);
+    if (cancelled) break;
+
+    closePanel();
+    await wait(600);
+  }
+
+  // Clean up
+  bar.classList.remove('active');
+  markFlyoverDone();
+
+  if (!cancelled) {
+    // Reset to overview
+    resetView();
+  }
+}
 
 // ── About modal ───────────────────────────────────────────────────────────────
 const aboutBackdrop = document.getElementById('about-backdrop');
