@@ -1412,12 +1412,8 @@ main();
 
 // ── Flyover ──────────────────────────────────────────────────────────────────
 
-function shouldRunFlyover() {
-  try { return !localStorage.getItem('flyover-done'); } catch { return false; }
-}
-function markFlyoverDone() {
-  try { localStorage.setItem('flyover-done', '1'); } catch {}
-}
+function shouldRunFlyover() { return true; }
+function markFlyoverDone() {}
 
 async function runFlyover() {
   if (!shouldRunFlyover()) return;
