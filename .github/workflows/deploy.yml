@@ -32,6 +32,8 @@ jobs:
           aws s3 cp apple-touch-icon.png s3://news-knowledge-graph/ --content-type "image/png" --cache-control "max-age=86400"
           aws s3 cp og-image.png s3://news-knowledge-graph/ --content-type "image/png" --cache-control "max-age=86400"
           aws s3 cp photo.jpg s3://news-knowledge-graph/ --content-type "image/jpeg" --cache-control "max-age=86400"
+          aws s3 cp robots.txt s3://news-knowledge-graph/ --content-type "text/plain" --cache-control "max-age=86400"
+          aws s3 cp sitemap.xml s3://news-knowledge-graph/ --content-type "application/xml" --cache-control "max-age=86400"
 
       - name: Invalidate CloudFront
         env:
