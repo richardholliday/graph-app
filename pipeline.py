@@ -207,8 +207,13 @@ def lambda_handler(event, context):
     if 0 <= est_hour < 6:
         print(f"Quiet hours ({est_hour:02d}:xx EST) — skipping run")
         return {"statusCode": 200, "body": "Skipped (quiet hours)"}
-    main()
-    return {"statusCode": 200, "body": "Graph updated"}
+    try:
+        main()
+        return {"statusCode": 200, "body": "Graph updated"}
+    except Exception as e:
+        # Leave existing graph.json in S3 untouched — site keeps serving last good data
+        print(f"Pipeline failed, preserving last good graph.json: {e}", file=sys.stderr)
+        return {"statusCode": 500, "body": f"Pipeline failed: {e}"}
 
 
 if __name__ == "__main__":
