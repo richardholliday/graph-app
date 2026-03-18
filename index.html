@@ -1374,8 +1374,20 @@ function updateStats(data) {
 
 function updateSubtitle(data) {
   if (!data.generated_at) return;
-  const ts = new Date(data.generated_at).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
-  document.getElementById('site-subtitle').textContent = `Last updated: ${ts}`;
+  const generated = new Date(data.generated_at);
+  const ageHours  = (Date.now() - generated) / 3_600_000;
+  const ts = generated.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+
+  const el = document.getElementById('site-subtitle');
+  if (ageHours >= 2) {
+    const label = ageHours < 3   ? 'a couple of hours'
+                : ageHours < 6   ? `${Math.floor(ageHours)} hours`
+                : ageHours < 24  ? 'several hours'
+                : `${Math.floor(ageHours / 24)} day${Math.floor(ageHours / 24) > 1 ? 's' : ''}`;
+    el.innerHTML = `Last updated: ${ts} <span style="color:#f59e0b;font-size:10px;">· data is ${label} old</span>`;
+  } else {
+    el.textContent = `Last updated: ${ts}`;
+  }
 }
 
 // ── Version ──────────────────────────────────────────────────────────────────
