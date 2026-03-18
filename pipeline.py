@@ -20,8 +20,12 @@ import boto3
 import feedparser
 from anthropic import Anthropic
 
-S3_BUCKET = os.environ.get("S3_BUCKET", "news-knowledge-graph")
-S3_KEY = "graph.json"
+S3_BUCKET       = os.environ.get("S3_BUCKET", "news-knowledge-graph")
+S3_KEY          = "graph.json"
+S3_LOGS_BUCKET  = "news-knowledge-graph-logs"
+TRAFFIC_KEY     = "last-traffic.json"
+IDLE_SKIP_HOURS = 3    # skip if no traffic within this window
+MAX_STALE_HOURS = 8    # always refresh if graph is older than this
 
 # ---------------------------------------------------------------------------
 # Config
@@ -200,6 +204,41 @@ def main():
     print(f"Uploaded → s3://{S3_BUCKET}/{S3_KEY}")
 
 
+def should_skip_due_to_idle() -> bool:
+    """Return True if there's been no traffic recently AND the graph is fresh enough."""
+    now = datetime.now(timezone.utc)
+    s3 = boto3.client('s3')
+
+    # Check last traffic timestamp
+    try:
+        obj = s3.get_object(Bucket=S3_LOGS_BUCKET, Key=TRAFFIC_KEY)
+        data = json.loads(obj['Body'].read())
+        last_traffic = datetime.fromisoformat(data['last_traffic'].replace('Z', '+00:00'))
+        hours_since_traffic = (now - last_traffic).total_seconds() / 3600
+    except Exception:
+        # No traffic file yet — don't skip
+        return False
+
+    if hours_since_traffic < IDLE_SKIP_HOURS:
+        return False  # recent traffic, run normally
+
+    # No recent traffic — check how stale the graph is
+    try:
+        obj = s3.get_object(Bucket=S3_BUCKET, Key=S3_KEY)
+        graph = json.loads(obj['Body'].read())
+        generated = datetime.fromisoformat(graph['generated_at'].replace('Z', '+00:00'))
+        hours_since_update = (now - generated).total_seconds() / 3600
+    except Exception:
+        return False  # can't read graph, run to be safe
+
+    if hours_since_update >= MAX_STALE_HOURS:
+        print(f"No traffic for {hours_since_traffic:.1f}h but graph is {hours_since_update:.1f}h old — refreshing")
+        return False
+
+    print(f"No traffic for {hours_since_traffic:.1f}h, graph is {hours_since_update:.1f}h old — skipping")
+    return True
+
+
 def lambda_handler(event, context):
     # Quiet hours: midnight–6am EST (UTC-5) — skip to control costs
     utc_hour = datetime.now(timezone.utc).hour
@@ -207,6 +246,9 @@ def lambda_handler(event, context):
     if 0 <= est_hour < 6:
         print(f"Quiet hours ({est_hour:02d}:xx EST) — skipping run")
         return {"statusCode": 200, "body": "Skipped (quiet hours)"}
+    if should_skip_due_to_idle():
+        return {"statusCode": 200, "body": "Skipped (idle — no recent traffic)"}
+
     try:
         main()
         return {"statusCode": 200, "body": "Graph updated"}

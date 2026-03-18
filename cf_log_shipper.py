@@ -208,6 +208,17 @@ def lambda_handler(event, context):
         log_stream = key.replace('/', '_').replace('.gz', '')
         ship_events(log_stream, entries)
 
+        # Record last real traffic timestamp if anyone loaded the app
+        if any(e['uri'] == '/graph.json' and not e['is_bot'] for e in entries):
+            latest = max(e['timestamp'] for e in entries if e['uri'] == '/graph.json' and not e['is_bot'])
+            s3_client.put_object(
+                Bucket=KNOWN_IPS_BUCKET,
+                Key='last-traffic.json',
+                Body=json.dumps({'last_traffic': latest}),
+                ContentType='application/json',
+            )
+            print(f"Updated last-traffic.json: {latest}")
+
     if new_ips_found:
         save_known_ips(known_ips)
 
