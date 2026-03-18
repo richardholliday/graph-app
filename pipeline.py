@@ -240,14 +240,19 @@ def should_skip_due_to_idle() -> bool:
 
 
 def lambda_handler(event, context):
+    forced = event.get("force", False)
+
     # Quiet hours: midnight–6am EST (UTC-5) — skip to control costs
     utc_hour = datetime.now(timezone.utc).hour
     est_hour = (utc_hour - 5) % 24
-    if 0 <= est_hour < 6:
+    if not forced and 0 <= est_hour < 6:
         print(f"Quiet hours ({est_hour:02d}:xx EST) — skipping run")
         return {"statusCode": 200, "body": "Skipped (quiet hours)"}
-    if should_skip_due_to_idle():
+    if not forced and should_skip_due_to_idle():
         return {"statusCode": 200, "body": "Skipped (idle — no recent traffic)"}
+
+    if forced:
+        print("Forced daily run — bypassing quiet hours and idle checks")
 
     try:
         main()
