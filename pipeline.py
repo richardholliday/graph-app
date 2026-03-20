@@ -26,6 +26,7 @@ S3_LOGS_BUCKET  = "news-knowledge-graph-logs"
 TRAFFIC_KEY     = "last-traffic.json"
 IDLE_SKIP_HOURS = 3    # skip if no traffic within this window
 MAX_STALE_HOURS = 8    # always refresh if graph is older than this
+SNS_TOPIC_ARN   = "arn:aws:sns:us-east-1:597062269817:graph-pipeline-alerts"
 
 # ---------------------------------------------------------------------------
 # Config
@@ -261,6 +262,15 @@ def lambda_handler(event, context):
     except Exception as e:
         # Leave existing graph.json in S3 untouched — site keeps serving last good data
         print(f"Pipeline failed, preserving last good graph.json: {e}", file=sys.stderr)
+        try:
+            sns = boto3.client("sns")
+            sns.publish(
+                TopicArn=SNS_TOPIC_ARN,
+                Subject="graph-pipeline failed",
+                Message=f"The graph pipeline failed with the following error:\n\n{e}",
+            )
+        except Exception as sns_err:
+            print(f"Failed to send SNS alert: {sns_err}", file=sys.stderr)
         return {"statusCode": 500, "body": f"Pipeline failed: {e}"}
 
 
