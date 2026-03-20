@@ -1,349 +1,361 @@
 {
   "nodes": [
     {
-      "id": "united-states",
-      "label": "United States",
-      "type": "country",
-      "description": "Major actor in the US-Israel war with Iran, conducting bombing campaigns and cyber warfare operations"
-    },
-    {
       "id": "iran",
       "label": "Iran",
       "type": "country",
-      "description": "Country under US-Israeli bombing campaign, with citizens sheltering at home amid ongoing war"
+      "description": "Middle Eastern country engaged in ongoing war with US and Israel, experiencing internal dissent and humanitarian crisis"
+    },
+    {
+      "id": "united-states",
+      "label": "United States",
+      "type": "country",
+      "description": "Engaged in military conflict with Iran, key geopolitical actor across multiple global issues"
     },
     {
       "id": "israel",
       "label": "Israel",
       "type": "country",
-      "description": "US ally conducting joint military operations against Iran; also linked to West Bank settler violence"
+      "description": "Military actor striking Lebanon and involved in conflict with Iran"
+    },
+    {
+      "id": "mojtaba-khamenei",
+      "label": "Mojtaba Khamenei",
+      "type": "person",
+      "description": "Iran's newly appointed Supreme Leader, issued first statement amid ongoing war"
     },
     {
       "id": "donald-trump",
       "label": "Donald Trump",
       "type": "person",
-      "description": "US president who has called for an uprising in Iran during the ongoing war"
+      "description": "US President making statements on Iran, FIFA World Cup, and oil prices"
     },
     {
-      "id": "us-israel-iran-war",
-      "label": "US-Israel War with Iran",
+      "id": "iran-us-israel-war",
+      "label": "Iran-US-Israel War",
       "type": "event",
-      "description": "Ongoing military conflict involving US and Israeli bombing campaigns against Iran"
+      "description": "Ongoing armed conflict involving Iran, the United States, and Israel"
     },
     {
-      "id": "g7",
-      "label": "G7",
+      "id": "hezbollah",
+      "label": "Hezbollah",
       "type": "organisation",
-      "description": "Group of seven nations that agreed to release emergency oil reserves in response to price surges"
+      "description": "Lebanese militant group targeted by Israeli strikes; Israel demands it stop attacks"
     },
     {
-      "id": "oil-reserve-release",
-      "label": "Emergency Oil Reserve Release",
-      "type": "event",
-      "description": "Record release of emergency oil reserves by G7 nations in response to surging prices caused by the Iran war"
-    },
-    {
-      "id": "european-union",
-      "label": "European Union",
-      "type": "organisation",
-      "description": "Demands Israel stop surge in West Bank settler violence since the Iran war began"
-    },
-    {
-      "id": "united-kingdom",
-      "label": "United Kingdom",
+      "id": "lebanon",
+      "label": "Lebanon",
       "type": "country",
-      "description": "Demands Israel stop settler violence; Russia accuses UK of helping Ukraine attack missile plant"
+      "description": "Country experiencing Israeli airstrikes on Beirut and southern regions"
     },
     {
-      "id": "west-bank-settler-violence",
-      "label": "West Bank Settler Violence",
+      "id": "strait-of-hormuz",
+      "label": "Strait of Hormuz",
+      "type": "concept",
+      "description": "Strategic waterway through which oil shipments pass, contested amid Iran conflict"
+    },
+    {
+      "id": "global-food-crisis",
+      "label": "Global Food Crisis",
       "type": "event",
-      "description": "Surge in Israeli settler attacks in the West Bank since the start of the Iran war, killing six Palestinians"
+      "description": "Potential food inflation crisis driven by rising energy and fertilizer costs from Iran conflict"
     },
     {
-      "id": "united-nations",
-      "label": "United Nations",
+      "id": "sudan",
+      "label": "Sudan",
+      "type": "country",
+      "description": "Country experiencing ongoing civil war, including drone strikes on civilian targets"
+    },
+    {
+      "id": "rapid-support-forces",
+      "label": "Rapid Support Forces",
       "type": "organisation",
-      "description": "Reports on Palestinian deaths from settler violence in the West Bank"
+      "description": "Sudanese paramilitary group blamed for drone strike on school killing 17"
+    },
+    {
+      "id": "m23-rebels",
+      "label": "M23 Rebels",
+      "type": "organisation",
+      "description": "Rebel group controlling Goma in eastern DRC, blamed drone strike killing French UN worker on DRC government"
+    },
+    {
+      "id": "democratic-republic-of-congo",
+      "label": "Democratic Republic of Congo",
+      "type": "country",
+      "description": "Eastern region controlled by M23 rebels, site of drone attack in Goma"
     },
     {
       "id": "china",
       "label": "China",
       "type": "country",
-      "description": "Holding its National People's Congress, the country's biggest political meeting"
+      "description": "Approved ethnic unity law mandating Mandarin for minorities; supplier of AI surveillance to African governments"
     },
     {
-      "id": "national-peoples-congress",
-      "label": "National People's Congress",
+      "id": "ethnic-unity-law",
+      "label": "Ethnic Unity Law",
       "type": "event",
-      "description": "China's biggest annual political meeting, recently concluded"
+      "description": "Chinese law requiring minorities to learn Mandarin from pre-kindergarten through high school"
     },
     {
-      "id": "ukraine",
-      "label": "Ukraine",
-      "type": "country",
-      "description": "Struck a Russian missile component plant; Russia accuses UK of involvement"
-    },
-    {
-      "id": "russia",
-      "label": "Russia",
-      "type": "country",
-      "description": "Says Ukraine's attack on its missile plant hit civilians and could not have been done without British help"
-    },
-    {
-      "id": "ukraine-russia-conflict",
-      "label": "Ukraine-Russia Conflict",
+      "id": "ai-mass-surveillance-africa",
+      "label": "AI Mass Surveillance in Africa",
       "type": "event",
-      "description": "Ongoing war in which Ukraine struck a Russian missile component plant"
+      "description": "Over $2bn spent by 11 African governments on Chinese-built AI surveillance technology"
     },
     {
-      "id": "oslo-embassy-explosion",
-      "label": "US Embassy Explosion in Oslo",
-      "type": "event",
-      "description": "Explosion at US embassy in Oslo; three brothers arrested, foreign state actor involvement investigated"
-    },
-    {
-      "id": "norway",
-      "label": "Norway",
-      "type": "country",
-      "description": "Location of the US embassy explosion in Oslo; authorities investigating foreign state involvement"
-    },
-    {
-      "id": "cyber-warfare-iran",
-      "label": "Cyber Warfare Against Iran",
-      "type": "concept",
-      "description": "US-hinted cyber operations playing a role in the conflict with Iran"
-    },
-    {
-      "id": "dr-congo-drone-strikes",
-      "label": "DR Congo Drone Strikes in Goma",
-      "type": "event",
-      "description": "Drone strikes in rebel-held Goma killing three including a French aid worker"
-    },
-    {
-      "id": "south-africa",
-      "label": "South Africa",
-      "type": "country",
-      "description": "Summoned new US ambassador over undiplomatic remarks; also site of Mugabe family legal issues"
-    },
-    {
-      "id": "leo-brent-bozell",
-      "label": "Leo Brent Bozell",
-      "type": "person",
-      "description": "New US ambassador to South Africa who apologised after making undiplomatic remarks"
-    },
-    {
-      "id": "mark-carney",
-      "label": "Mark Carney",
-      "type": "person",
-      "description": "Canadian Prime Minister inching closer to a majority as MPs defect to the Liberals"
-    },
-    {
-      "id": "liberal-party-canada",
-      "label": "Liberal Party of Canada",
+      "id": "african-governments",
+      "label": "African Governments",
       "type": "organisation",
-      "description": "Governing party under Mark Carney gaining MPs through floor-crossings"
+      "description": "11 African governments that have purchased Chinese AI surveillance systems"
     },
     {
-      "id": "namibia-green-hydrogen",
-      "label": "Namibia Green Hydrogen Project",
+      "id": "uk-foreign-commonwealth-development-office",
+      "label": "UK FCDO",
+      "type": "organisation",
+      "description": "UK government body that axed the Global Health Workforce Programme due to aid cuts"
+    },
+    {
+      "id": "global-health-workforce-programme",
+      "label": "Global Health Workforce Programme",
+      "type": "organisation",
+      "description": "UK-funded health programme supporting six African countries, axed due to aid cuts"
+    },
+    {
+      "id": "afghan-refugees",
+      "label": "Afghan Refugees",
+      "type": "concept",
+      "description": "Thousands of Afghans in Iran trying to flee amid war, collapsing infrastructure, and humanitarian crisis"
+    },
+    {
+      "id": "iran-war-humanitarian-crisis",
+      "label": "Iran War Humanitarian Crisis",
       "type": "event",
-      "description": "Planned huge hydrogen production facility in Namibia's desert and coastal wilderness"
+      "description": "Internal collapse of infrastructure, hunger, and displacement of refugees and poor Iranians due to ongoing war"
     },
     {
-      "id": "namibia",
-      "label": "Namibia",
+      "id": "balendra-shah",
+      "label": "Balendra Shah",
+      "type": "person",
+      "description": "Rapper-politician whose Rastriya Swatantra Party won Nepal elections"
+    },
+    {
+      "id": "rastriya-swatantra-party",
+      "label": "Rastriya Swatantra Party",
+      "type": "organisation",
+      "description": "Nepali political party led by Balendra Shah that won a large majority in Nepal elections"
+    },
+    {
+      "id": "nepal",
+      "label": "Nepal",
       "type": "country",
-      "description": "Country planning a large green hydrogen facility that could threaten local penguin habitats"
+      "description": "Country where Rastriya Swatantra Party won election on anti-corruption platform"
     },
     {
       "id": "jeffrey-epstein",
       "label": "Jeffrey Epstein",
       "type": "person",
-      "description": "Used a modelling agent to recruit girls from Brazil via US visas"
+      "description": "Deceased US financier accused of using modelling agents to recruit Brazilian girls"
     },
     {
-      "id": "iraq-1991",
-      "label": "Iraq 1991 Uprising",
-      "type": "event",
-      "description": "Historical precedent of a failed uprising in Iraq that serves as a cautionary lesson for Trump's Iran strategy"
+      "id": "serbia",
+      "label": "Serbia",
+      "type": "country",
+      "description": "Top arms importer in the Western Balkans region"
+    },
+    {
+      "id": "refugees-beirut",
+      "label": "Refugees in Beirut",
+      "type": "concept",
+      "description": "Refugees from Sudan and Ethiopia sheltering in Beirut who are again caught in conflict due to Israeli/US strikes"
     }
   ],
   "links": [
     {
+      "source": "iran-us-israel-war",
+      "target": "iran",
+      "type": "impacts",
+      "description": "War is causing internal dissent, infrastructure collapse, and humanitarian crisis in Iran"
+    },
+    {
+      "source": "iran-us-israel-war",
+      "target": "mojtaba-khamenei",
+      "type": "involves",
+      "description": "Mojtaba Khamenei issued his first statement as Supreme Leader amid the ongoing war"
+    },
+    {
+      "source": "mojtaba-khamenei",
+      "target": "strait-of-hormuz",
+      "type": "opposes",
+      "description": "Khamenei stated the strait should remain closed during the conflict"
+    },
+    {
+      "source": "donald-trump",
+      "target": "strait-of-hormuz",
+      "type": "responds_to",
+      "description": "Trump claimed the US benefits from high oil prices amid the Hormuz standoff"
+    },
+    {
+      "source": "iran-us-israel-war",
+      "target": "global-food-crisis",
+      "type": "causes",
+      "description": "Rising energy and fertilizer costs from the Iran conflict are driving potential global food inflation"
+    },
+    {
+      "source": "iran-us-israel-war",
+      "target": "iran-war-humanitarian-crisis",
+      "type": "causes",
+      "description": "War has caused collapsing infrastructure, hunger, and displacement inside Iran"
+    },
+    {
+      "source": "iran-war-humanitarian-crisis",
+      "target": "afghan-refugees",
+      "type": "impacts",
+      "description": "Afghan refugees in Iran are disproportionately harmed by war-related infrastructure collapse and violence"
+    },
+    {
       "source": "united-states",
       "target": "iran",
       "type": "threatens",
-      "description": "The US is conducting a bombing campaign against Iran and has called for an uprising"
+      "description": "US engaged in military operations against Iran as part of ongoing war"
     },
     {
       "source": "israel",
       "target": "iran",
       "type": "threatens",
-      "description": "Israel is jointly conducting military operations against Iran alongside the US"
+      "description": "Israel involved in military conflict with Iran"
     },
     {
-      "source": "united-states",
+      "source": "israel",
+      "target": "lebanon",
+      "type": "threatens",
+      "description": "Israel struck central Beirut and threatened to expand operations and seize Lebanese territory"
+    },
+    {
+      "source": "israel",
+      "target": "hezbollah",
+      "type": "opposes",
+      "description": "Israel demands Hezbollah stop attacks or face expanded military operations in Lebanon"
+    },
+    {
+      "source": "hezbollah",
       "target": "israel",
-      "type": "allies_with",
-      "description": "US and Israel are allied in their war against Iran"
+      "type": "threatens",
+      "description": "Hezbollah conducting attacks that prompted Israeli military response in Lebanon"
     },
     {
       "source": "donald-trump",
       "target": "iran",
-      "type": "threatens",
-      "description": "Trump has called for an uprising in Iran during the ongoing war"
-    },
-    {
-      "source": "us-israel-iran-war",
-      "target": "oil-reserve-release",
-      "type": "causes",
-      "description": "The war caused oil price surges, prompting the G7 to release emergency oil reserves"
-    },
-    {
-      "source": "g7",
-      "target": "oil-reserve-release",
-      "type": "involves",
-      "description": "G7 nations agreed to a record release of emergency oil reserves"
-    },
-    {
-      "source": "us-israel-iran-war",
-      "target": "west-bank-settler-violence",
-      "type": "causes",
-      "description": "Settler violence in the West Bank surged since the start of the Iran war"
-    },
-    {
-      "source": "european-union",
-      "target": "israel",
       "type": "opposes",
-      "description": "EU demands Israel stop the surge in West Bank settler violence"
+      "description": "Trump said it would not be appropriate for Iran to participate in the US-hosted FIFA World Cup"
     },
     {
-      "source": "united-kingdom",
-      "target": "israel",
-      "type": "opposes",
-      "description": "UK demands Israel stop West Bank settler violence"
-    },
-    {
-      "source": "united-nations",
-      "target": "west-bank-settler-violence",
-      "type": "involves",
-      "description": "UN reports six Palestinians killed in settler attacks since the war began"
-    },
-    {
-      "source": "israel",
-      "target": "west-bank-settler-violence",
-      "type": "involves",
-      "description": "Israeli settlers are responsible for the surge in violence in the West Bank"
-    },
-    {
-      "source": "united-states",
-      "target": "cyber-warfare-iran",
-      "type": "involves",
-      "description": "The US has hinted at using cyber warfare operations in the Iran conflict"
-    },
-    {
-      "source": "cyber-warfare-iran",
-      "target": "iran",
-      "type": "impacts",
-      "description": "Cyber warfare has played a role in the military campaign against Iran"
-    },
-    {
-      "source": "us-israel-iran-war",
-      "target": "iran",
-      "type": "impacts",
-      "description": "Iranian civilians are sheltering at home as bombing continues on near-empty streets"
-    },
-    {
-      "source": "iraq-1991",
-      "target": "donald-trump",
-      "type": "impacts",
-      "description": "The failed 1991 Iraq uprising serves as a cautionary lesson for Trump's Iran strategy"
-    },
-    {
-      "source": "ukraine",
-      "target": "russia",
-      "type": "opposes",
-      "description": "Ukraine struck a Russian missile component plant in the ongoing conflict"
-    },
-    {
-      "source": "russia",
-      "target": "united-kingdom",
-      "type": "accuses",
-      "description": "Russia says the Ukraine attack on its missile plant could not have been carried out without British help"
-    },
-    {
-      "source": "united-kingdom",
-      "target": "ukraine",
-      "type": "supports",
-      "description": "Russia's accusation implies UK support for Ukraine's military strikes"
-    },
-    {
-      "source": "oslo-embassy-explosion",
+      "source": "iran",
       "target": "united-states",
+      "type": "negotiates_with",
+      "description": "Iran's president set terms including reparations and non-aggression guarantees to end the war"
+    },
+    {
+      "source": "rapid-support-forces",
+      "target": "sudan",
+      "type": "threatens",
+      "description": "RSF drone strike killed at least 17 people including schoolgirls in White Nile province"
+    },
+    {
+      "source": "m23-rebels",
+      "target": "democratic-republic-of-congo",
+      "type": "threatens",
+      "description": "M23 controls Goma and blamed DRC government for drone strike killing French UN worker"
+    },
+    {
+      "source": "sudan",
+      "target": "refugees-beirut",
+      "type": "causes",
+      "description": "Ongoing Sudanese conflict drove refugees to Lebanon where they face further conflict"
+    },
+    {
+      "source": "iran-us-israel-war",
+      "target": "refugees-beirut",
       "type": "impacts",
-      "description": "Explosion targeted the US embassy in Oslo, Norway"
-    },
-    {
-      "source": "oslo-embassy-explosion",
-      "target": "norway",
-      "type": "located_in",
-      "description": "The US embassy explosion occurred in Oslo, Norway"
-    },
-    {
-      "source": "leo-brent-bozell",
-      "target": "south-africa",
-      "type": "involves",
-      "description": "New US ambassador summoned by South Africa over undiplomatic remarks"
-    },
-    {
-      "source": "united-states",
-      "target": "south-africa",
-      "type": "involves",
-      "description": "Diplomatic tension after US ambassador's undiplomatic remarks in South Africa"
+      "description": "Israeli and US strikes on Lebanon have displaced refugees who had already fled Sudan and Ethiopia"
     },
     {
       "source": "china",
-      "target": "national-peoples-congress",
+      "target": "ethnic-unity-law",
+      "type": "causes",
+      "description": "China approved the ethnic unity law mandating Mandarin learning for minority groups"
+    },
+    {
+      "source": "china",
+      "target": "ethnic-unity-law",
       "type": "involves",
-      "description": "China held its biggest annual political meeting, the National People's Congress"
+      "description": "Law requires minority children to learn Mandarin before kindergarten through high school"
     },
     {
-      "source": "mark-carney",
-      "target": "liberal-party-canada",
+      "source": "china",
+      "target": "ai-mass-surveillance-africa",
+      "type": "causes",
+      "description": "China supplied over $2bn of AI surveillance technology to 11 African governments"
+    },
+    {
+      "source": "african-governments",
+      "target": "ai-mass-surveillance-africa",
       "type": "involves",
-      "description": "Mark Carney leads the Liberal Party and is gaining MPs through floor-crossings"
+      "description": "11 African governments purchased and deployed Chinese AI surveillance systems"
     },
     {
-      "source": "namibia",
-      "target": "namibia-green-hydrogen",
-      "type": "involves",
-      "description": "Namibia is planning a huge green hydrogen facility in its desert wilderness"
-    },
-    {
-      "source": "jeffrey-epstein",
-      "target": "united-states",
-      "type": "located_in",
-      "description": "Epstein used US visas and modelling businesses to recruit girls from Brazil"
-    },
-    {
-      "source": "us-israel-iran-war",
-      "target": "oslo-embassy-explosion",
+      "source": "ai-mass-surveillance-africa",
+      "target": "african-governments",
       "type": "impacts",
-      "description": "The war context raises questions about whether the embassy explosion is linked to foreign state actors"
+      "description": "Surveillance systems are violating citizens' privacy and chilling civil freedoms across Africa"
     },
     {
-      "source": "donald-trump",
-      "target": "us-israel-iran-war",
-      "type": "involves",
-      "description": "Trump is directing US involvement in the war with Iran"
-    },
-    {
-      "source": "us-israel-iran-war",
-      "target": "g7",
+      "source": "uk-foreign-commonwealth-development-office",
+      "target": "global-health-workforce-programme",
       "type": "impacts",
-      "description": "The war's economic consequences forced G7 coordination on emergency oil reserves"
+      "description": "FCDO axed the Global Health Workforce Programme due to aid budget cuts"
+    },
+    {
+      "source": "global-health-workforce-programme",
+      "target": "african-governments",
+      "type": "supports",
+      "description": "Programme previously supported healthcare training in six African countries"
+    },
+    {
+      "source": "rastriya-swatantra-party",
+      "target": "balendra-shah",
+      "type": "involves",
+      "description": "Balendra Shah led his party to a large majority win in Nepal elections"
+    },
+    {
+      "source": "rastriya-swatantra-party",
+      "target": "nepal",
+      "type": "impacts",
+      "description": "Party won majority in Nepal election focused on anti-corruption issues"
+    },
+    {
+      "source": "united-states",
+      "target": "jeffrey-epstein",
+      "type": "involves",
+      "description": "Epstein used modelling agents to recruit Brazilian girls and arrange US visas for them"
+    },
+    {
+      "source": "serbia",
+      "target": "iran-us-israel-war",
+      "type": "responds_to",
+      "description": "Serbia's increased arms imports reflect regional security concerns amid broader geopolitical instability"
+    },
+    {
+      "source": "iran-war-humanitarian-crisis",
+      "target": "global-food-crisis",
+      "type": "causes",
+      "description": "Humanitarian collapse in Iran compounds global food supply risks through energy and fertilizer shortages"
+    },
+    {
+      "source": "iran",
+      "target": "mojtaba-khamenei",
+      "type": "involves",
+      "description": "Khamenei is Iran's newly appointed Supreme Leader guiding wartime policy"
     }
   ],
-  "generated_at": "2026-03-12T01:30:30.390473+00:00"
+  "generated_at": "2026-03-12T17:48:50.192251+00:00"
 }

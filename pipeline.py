@@ -92,6 +92,7 @@ Rules:
 - Every relationship source and target MUST reference an ID that exists in your entities list
 - Aim for 15–30 entities and 20–40 relationships
 - Prefer depth (chains of causation) over breadth
+- For `involves`: the source must be the event, country, law, or institution; the target is the person or entity participating in it. A person must never be the source of an `involves` relationship.
 
 Respond with ONLY a JSON object in this exact format, no other text:
 {
