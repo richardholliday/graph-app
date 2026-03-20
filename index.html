@@ -242,27 +242,52 @@
       margin-bottom: 10px;
     }
     .conn-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 0;
+      padding: 9px 0;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       font-size: 13px;
-      cursor: pointer;
     }
-    .conn-item:hover { color: #fff; }
     .conn-item:last-child { border-bottom: none; }
-    .conn-label { flex: 1; font-weight: 500; }
-    .conn-dir { font-size: 13px; opacity: 0.4; flex-shrink: 0; }
-    .conn-type {
-      font-size: 10px;
+    .conn-sentence {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .conn-node {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 4px;
+      padding: 2px 4px;
+      transition: background 0.15s;
+    }
+    .conn-node:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    .conn-self {
+      display: inline-block;
+      font-weight: 600;
+      font-size: 11px;
       padding: 2px 7px;
-      border-radius: 10px;
+      border-radius: 4px;
       background: rgba(255,255,255,0.08);
       color: var(--text-dim);
+      letter-spacing: 0.03em;
+    }
+    .conn-verb {
+      font-size: 11px;
+      font-style: italic;
+      color: #7dd3fc;
       white-space: nowrap;
     }
-    .conn-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .conn-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .conn-desc {
+      margin-top: 4px;
+      font-size: 11px;
+      line-height: 1.5;
+      opacity: 0.45;
+      padding: 0 2px;
+    }
 
     /* ── Tooltip ── */
     #tooltip {
@@ -1324,17 +1349,30 @@ function openPanel(node) {
     list.innerHTML = '<div style="opacity:0.4;font-size:12px;">No connections</div>';
   } else {
     links.forEach(l => {
-      const otherId = (l.source.id ?? l.source) === node.id ? (l.target.id ?? l.target) : (l.source.id ?? l.source);
+      const srcId = l.source.id ?? l.source;
+      const isOutgoing = srcId === node.id;
+      const otherId = isOutgoing ? (l.target.id ?? l.target) : srcId;
       const other = nodeById.get(otherId);
       if (!other) return;
+
+      const color = NODE_COLOR[other.type] || '#64748b';
+      const verb = l.type.replace(/_/g, ' ');
+      const otherHtml = `
+        <span class="conn-node" data-id="${other.id}">
+          <span class="conn-dot" style="background:${color}"></span>${other.label}
+        </span>`;
+      const selfHtml = `<span class="conn-self">${node.label}</span>`;
+
       const item = document.createElement('div');
       item.className = 'conn-item';
       item.innerHTML = `
-        <div class="conn-dot" style="background:${NODE_COLOR[other.type] || '#64748b'}"></div>
-        <span class="conn-label">${other.label}</span>
-        <span class="conn-dir">${(l.source.id ?? l.source) === node.id ? '→' : '←'}</span>
-        <span class="conn-type">${l.type.replace(/_/g, ' ')}</span>`;
-      item.addEventListener('click', () => openPanel(other));
+        <div class="conn-sentence">
+          <div class="conn-subject">${isOutgoing ? selfHtml : otherHtml}</div>
+          <div class="conn-verb">${verb}</div>
+          <div class="conn-object">${isOutgoing ? otherHtml : selfHtml}</div>
+        </div>
+        ${l.description ? `<div class="conn-desc">${l.description}</div>` : ''}`;
+      item.querySelector('.conn-node').addEventListener('click', () => openPanel(other));
       list.appendChild(item);
     });
   }
