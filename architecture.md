@@ -41,7 +41,8 @@ flowchart TD
 
     Browser((Browser))
 
-    E1 & E2 -->|invoke| PL
+    E1 -->|invoke| PL
+    E2 -->|invoke| PL
     PL -->|fetch headlines| RSS
     PL -->|extract entities & relationships| Claude
     PL -->|write graph.json| S3Main
