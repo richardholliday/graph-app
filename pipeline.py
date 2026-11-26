@@ -5,7 +5,6 @@ Fetches headlines from RSS feeds, sends them to Claude to extract entities
 and relationships, then writes a graph.json file for the D3 visualiser.
 
 Usage:
-    export ANTHROPIC_API_KEY=sk-ant-...
     python pipeline.py
 """
 
@@ -20,6 +19,7 @@ import boto3
 import feedparser
 from anthropic import Anthropic
 
+SECRET_NAME     = "graph-app/anthropic-api-key"
 S3_BUCKET       = os.environ.get("S3_BUCKET", "news-knowledge-graph")
 S3_KEY          = "graph.json"
 S3_LOGS_BUCKET  = "news-knowledge-graph-logs"
@@ -102,8 +102,13 @@ Respond with ONLY a JSON object in this exact format, no other text:
 }"""
 
 
+def _get_anthropic_key() -> str:
+    sm = boto3.client("secretsmanager")
+    return sm.get_secret_value(SecretId=SECRET_NAME)["SecretString"]
+
+
 def extract_graph(articles: list[dict]) -> dict:
-    client = Anthropic()
+    client = Anthropic(api_key=_get_anthropic_key())
 
     articles_text = "\n\n".join(
         f"ARTICLE {i + 1}: {a['title']}\n{a['summary']}"
